@@ -1,0 +1,25 @@
+{
+  "name": "nextjs-testing",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@mrii/react-form-builder": "link:..",
+    "next": "12.1.0",
+    "react": "link:../node_modules/react",
+    "react-dom": "link:../node_modules/react-dom"
+  },
+  "devDependencies": {
+    "@types/node": "link:../node_modules/@types/node",
+    "@types/react": "link:../node_modules/@types/react",
+    "@types/react-dom": "link:../node_modules/@types/react-dom",
+    "eslint": "link:../node_modules/eslint",
+    "eslint-config-next": "12.1.0",
+    "typescript": "link:../node_modules/typescript"
+  }
+}
