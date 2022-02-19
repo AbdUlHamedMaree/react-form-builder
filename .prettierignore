@@ -1,0 +1,17 @@
+/node_modules
+/build
+/dist
+/.next
+/.env.development
+/.env.example
+/.env.production
+/.gitignore
+/.husky
+/.prettierignore
+/yarn.lock
+
+*.png
+*.svg
+*.jpg
+*.ico
+*.txt

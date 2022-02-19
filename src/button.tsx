@@ -1,5 +1,5 @@
 export type ButtonProps = {};
 
 export const Button: React.FC<ButtonProps> = ({ children }) => {
-  return <button>{children}</button>;
+  return <button type='button'>{children}</button>;
 };
