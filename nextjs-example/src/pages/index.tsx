@@ -1,9 +1,10 @@
-import { Button } from '@mrii/react-form-builder';
+import { FormBuilder, TextInput } from '@mrii/react-form-builder';
+
 const Home = () => {
   return (
-    <main>
-      <Button> asdzxc</Button>
-    </main>
+    <FormBuilder>
+      <TextInput name='title' label='Title' />
+    </FormBuilder>
   );
 };
 
