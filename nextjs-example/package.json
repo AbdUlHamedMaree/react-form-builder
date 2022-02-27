@@ -1,16 +1,16 @@
 {
   "name": "nextjs-testing",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "scripts": {
-    "dev": "next dev",
+    "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint . --fix"
   },
   "dependencies": {
     "@mrii/react-form-builder": "link:..",
-    "next": "12.1.0",
+    "next": "link:../node_modules/next",
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom"
   },

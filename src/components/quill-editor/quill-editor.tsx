@@ -1,11 +1,16 @@
-import Quill from 'react-quill';
 import { styled, Theme } from '@mui/material';
 import { MUIStyledCommonProps } from '@mui/system';
 import { StyledComponent } from '@emotion/styled';
-import { BaseQuillEditorProps } from './types';
+import dynamic from 'next/dynamic';
+import { BaseQuillEditorProps, QuillEditorClassType } from './types';
+
+let Quill: React.ComponentType<BaseQuillEditorProps>;
+if (dynamic) Quill = dynamic(() => import('react-quill'), { ssr: false });
+// eslint-disable-next-line global-require
+else Quill = require('react-quill');
 
 export type QuillEditorProps = BaseQuillEditorProps &
-  MUIStyledCommonProps<Theme> & { ref?: React.Ref<Quill> };
+  MUIStyledCommonProps<Theme> & { ref?: React.Ref<QuillEditorClassType> };
 
 export const QuillEditor = styled(Quill)(({ theme }) => ({
   border: 1,
@@ -84,6 +89,6 @@ export const QuillEditor = styled(Quill)(({ theme }) => ({
   BaseQuillEditorProps & MUIStyledCommonProps<Theme>,
   {},
   {
-    ref?: React.Ref<Quill>;
+    ref?: React.Ref<QuillEditorClassType>;
   }
 >;
