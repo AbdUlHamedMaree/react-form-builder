@@ -37,6 +37,10 @@ export const ResolvedQuillEditorInput = React.memo(
       },
       forwardRef
     ) {
+      if (!QuillEditor)
+        throw new Error(
+          `You need to install 'quill' and 'react-quill' packages for this component to work`
+        );
       const {
         field: { name, onBlur, onChange, ref, value },
         fieldState: { invalid, error },

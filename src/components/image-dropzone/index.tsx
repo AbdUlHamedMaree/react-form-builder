@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable global-require */
 import { forwardRef, useCallback, useState } from 'react';
-import { useDropzone, DropzoneOptions } from 'react-dropzone';
+import { DropzoneState, DropzoneOptions } from 'react-dropzone';
 import {
   Avatar,
   Box,
@@ -13,6 +15,18 @@ import {
 } from '@mui/material';
 import { Close, Visibility } from '@mui/icons-material';
 import { mergeRefs } from '../../utils';
+
+type UseDropZone = (options?: DropzoneOptions | undefined) => DropzoneState;
+
+let useDropzone = (globalThis as { useDropzone?: UseDropZone })?.useDropzone;
+
+if (useDropzone === undefined) {
+  try {
+    useDropzone = require('react-dropzone').useDropzone;
+  } catch (err) {
+    //
+  }
+}
 
 export type ImageDropzoneLabels = {
   preview: string;
@@ -39,6 +53,11 @@ export const FileDropzone = forwardRef<HTMLInputElement, FileDropzoneProps>(
     { file = '', onRemove, onRemoveAll, loading, labels = defaultLabels, ...options },
     ref
   ) => {
+    if (!useDropzone)
+      throw new Error(
+        `You need to install 'react-dropzone' package for this component to work`
+      );
+
     const { getRootProps, getInputProps, isDragActive, rootRef, inputRef } =
       useDropzone(options);
 
