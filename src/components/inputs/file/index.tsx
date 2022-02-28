@@ -4,14 +4,14 @@ import { ResolvedFileInput, ResolvedFileInputProps } from '../../resolved-inputs
 import { stringToLabel } from '../../../utils';
 import { FinalInputProps } from '../../../types';
 
-export type ImageInputProps = FinalInputProps<
+export type FileInputProps = FinalInputProps<
   ResolvedFileInputProps,
   'fileDropzoneProps',
   Pick<ResolvedFileInputProps, 'onUpload'>
 >;
 
-export const ImageInput = React.memo(
-  React.forwardRef<HTMLInputElement, ImageInputProps>(function ImageInput(
+export const FileInput = React.memo(
+  React.forwardRef<HTMLInputElement, FileInputProps>(function FileInput(
     {
       name,
       label,

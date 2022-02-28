@@ -7,14 +7,14 @@ import {
 import { stringToLabel } from '../../../utils';
 import { FinalInputProps } from '../../../types';
 
-export type MultiImageInputProps = FinalInputProps<
+export type FileImageInputProps = FinalInputProps<
   ResolvedMultiFileInputProps,
   'filesDropzoneProps',
   Pick<ResolvedMultiFileInputProps, 'onUpload'>
 >;
 
-export const MultiImageInput = React.memo(
-  React.forwardRef<HTMLInputElement, MultiImageInputProps>(function MultiImageInput(
+export const FileImageInput = React.memo(
+  React.forwardRef<HTMLInputElement, FileImageInputProps>(function FileImageInput(
     {
       name,
       label,
