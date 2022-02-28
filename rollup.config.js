@@ -1,30 +1,39 @@
-import resolve from '@rollup/plugin-node-resolve';
+import { defineConfig } from 'rollup';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import dts from 'rollup-plugin-dts';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import { swc, defineRollupSwcOption } from 'rollup-plugin-swc3';
 
+import { dirname } from 'path';
 import packageJson from './package.json';
 
-export default [
+export default defineConfig([
   {
     input: packageJson.source,
     output: [
       {
-        file: packageJson.module,
+        dir: dirname(packageJson.module),
         format: 'esm',
-        sourcemap: true,
+        sourcemap: 'inline',
+        preserveModules: true,
+        strict: true,
       },
       {
-        file: packageJson.main,
+        dir: dirname(packageJson.main),
         format: 'cjs',
-        sourcemap: true,
+        sourcemap: 'inline',
+        preserveModules: true,
+        strict: true,
+        esModule: false,
       },
     ],
-
+    treeshake: {
+      moduleSideEffects: false,
+    },
     plugins: [
       peerDepsExternal(),
-      resolve(),
+      nodeResolve(),
       commonjs(),
       swc(
         defineRollupSwcOption({
@@ -35,11 +44,11 @@ export default [
               tsx: true,
               dynamicImport: true,
             },
-            target: 'es2020',
+            target: 'es2022',
             loose: true,
             minify: {
               compress: true,
-              mangle: false,
+              mangle: true,
             },
             transform: {
               react: {
@@ -47,13 +56,21 @@ export default [
               },
             },
           },
+          module: { strict: true, type: 'es6', strictMode: true },
+          isModule: true,
         })
       ),
     ],
   },
   {
     input: packageJson.source,
-    output: [{ file: packageJson.types, format: 'esm' }],
+    output: [
+      {
+        dir: dirname(packageJson.types),
+        format: 'esm',
+        preserveModules: true,
+      },
+    ],
     plugins: [dts()],
   },
-];
+]);

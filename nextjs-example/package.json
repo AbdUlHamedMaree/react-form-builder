@@ -3,16 +3,19 @@
   "version": "0.1.0",
   "private": false,
   "scripts": {
-    "dev": "NODE_OPTIONS='--inspect' next dev",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint . --fix"
   },
   "dependencies": {
     "@mrii/react-form-builder": "link:..",
-    "next": "link:../node_modules/next",
+    "next": "^12.1.0",
+    "quill": "^1.3.7",
     "react": "link:../node_modules/react",
-    "react-dom": "link:../node_modules/react-dom"
+    "react-dom": "link:../node_modules/react-dom",
+    "react-quill": "^1.3.5",
+    "yup": "link:../node_modules/yup"
   },
   "devDependencies": {
     "@types/node": "link:../node_modules/@types/node",

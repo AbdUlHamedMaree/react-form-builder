@@ -50,7 +50,7 @@ export const ResolvedMultiFileInput = React.memo(
 
       const [loading, setLoading] = useState(false);
 
-      const [result, setResult] = useState(value as FileWithPreview[]);
+      const [result, setResult] = useState((value ?? []) as FileWithPreview[]);
 
       useEffect(() => {
         onChange(result);

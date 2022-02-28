@@ -20,10 +20,10 @@
   },
   "license": "MIT",
   "author": "Abd UlHameed Maree",
-  "source": "src/index.ts",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "source": "./src/index.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
   "files": [
     "dist"
   ],
@@ -43,7 +43,8 @@
   "scripts": {
     "build": "rimraf dist && rollup -c",
     "build:watch": "rollup -c -w",
-    "example": "concurrently \"yarn build:watch\" \"cd ./example && yarn dev\"",
+    "example:next": "concurrently \"yarn build:watch\" \"cd ./nextjs-example && yarn dev\"",
+    "example:react": "concurrently \"yarn build:watch\" \"cd ./reactjs-example && yarn start\"",
     "test": "jest",
     "lint": "yarn tsc && yarn eslint --quiet",
     "lint:fix": "yarn eslint --fix",
@@ -95,6 +96,7 @@
     "rollup-plugin-dts": "^4.1.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-swc3": "^0.2.0",
+    "rollup-plugin-terser": "^7.0.2",
     "tslib": "^2.3.1",
     "typescript": "^4.5.5",
     "yup": "^0.32.11"

@@ -10,7 +10,7 @@ if (dynamic) Quill = dynamic(() => import('react-quill'), { ssr: false });
 else Quill = require('react-quill');
 
 export type QuillEditorProps = BaseQuillEditorProps &
-  MUIStyledCommonProps<Theme> & { ref?: React.Ref<QuillEditorClassType> };
+  Omit<MUIStyledCommonProps<Theme>, 'theme'> & { ref?: React.Ref<QuillEditorClassType> };
 
 export const QuillEditor = styled(Quill)(({ theme }) => ({
   border: 1,
@@ -85,10 +85,4 @@ export const QuillEditor = styled(Quill)(({ theme }) => ({
       },
     },
   },
-})) as StyledComponent<
-  BaseQuillEditorProps & MUIStyledCommonProps<Theme>,
-  {},
-  {
-    ref?: React.Ref<QuillEditorClassType>;
-  }
->;
+})) as StyledComponent<QuillEditorProps>;

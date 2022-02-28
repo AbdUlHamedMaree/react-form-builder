@@ -42,6 +42,8 @@ export const ResolvedQuillEditorInput = React.memo(
         fieldState: { invalid, error },
       } = useController(useControllerProps);
 
+      console.log({ value });
+
       return (
         <Paper
           variant='outlined'
@@ -72,8 +74,11 @@ export const ResolvedQuillEditorInput = React.memo(
               ...quillEditorProps?.sx,
               borderColor: t => (invalid ? t.palette.error.main : t.palette.divider),
             }}
-            value={value}
-            onChange={mergeFunctions(onChange, quillEditorProps?.onChange)}
+            value={value ?? ''}
+            onChange={mergeFunctions(
+              content => onChange(content),
+              quillEditorProps?.onChange
+            )}
             onBlur={mergeFunctions(onBlur, quillEditorProps?.onBlur)}
             ref={mergeRefs(ref, forwardRef)}
           />
