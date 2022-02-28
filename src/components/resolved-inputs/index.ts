@@ -1,5 +1,5 @@
 export * from './check-box';
-export * from './custom-input';
+export * from './custom';
 export * from './date';
 export * from './date-time';
 export * from './file';

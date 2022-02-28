@@ -42,8 +42,6 @@ export const ResolvedQuillEditorInput = React.memo(
         fieldState: { invalid, error },
       } = useController(useControllerProps);
 
-      console.log({ value });
-
       return (
         <Paper
           variant='outlined'

@@ -6,6 +6,7 @@ import {
   TextInput,
   QuillEditorInput,
   MultiImageInput,
+  ImageInput,
 } from '@mrii/react-form-builder';
 import * as yup from 'yup';
 import { Box } from '@mui/material';
@@ -38,7 +39,11 @@ export const App: React.VFC = () => {
         <TextInput size='small' margin='dense' name='title' label='Title' fullWidth />
         <SwitchInput name='approved' label='Approve' />
         <QuillEditorInput name='asd' />
-        <MultiImageInput name='asdz' label='files' onUpload={(files)=>[]} />
+        <ImageInput
+          name='asdz'
+          label='files'
+          onUpload={files => Promise.resolve({ value: '1', preview: '' })}
+        />
         <FormSubmitInput size='large' variant='contained' fullWidth>
           asd
         </FormSubmitInput>
