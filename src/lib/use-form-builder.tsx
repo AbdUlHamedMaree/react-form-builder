@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
+  Path,
   SubmitErrorHandler,
   SubmitHandler,
   useForm,
@@ -23,8 +24,9 @@ export type UseFormBuilderReturn<
   TFieldType extends AnyObject = AnyObject,
   TContext extends AnyObject = AnyObject
 > = {
-  onSubmit?: SubmitHandler<TFieldType>;
-  onError?: SubmitErrorHandler<TFieldType>;
+  onSubmit: SubmitHandler<TFieldType>;
+  onError: SubmitErrorHandler<TFieldType>;
+  n: <T extends Path<TFieldType>>(path: T) => T;
 } & UseFormReturn<TFieldType, TContext>;
 
 export const useFormBuilder = <
@@ -37,6 +39,7 @@ export const useFormBuilder = <
   },
   validation = object(),
   onSubmit = () => null,
+  // eslint-disable-next-line no-console
   onError = (...args) => console.error(args),
 }: UseFormBuilderOptions<TFieldType, TContext>): UseFormBuilderReturn<
   TFieldType,
@@ -47,5 +50,6 @@ export const useFormBuilder = <
     [useFormProps, validation]
   );
   const methods = useForm(resolvedFormHookParams);
-  return { ...methods, onSubmit, onError };
+  const n = useCallback<UseFormBuilderReturn['n']>(p => p, []);
+  return { ...methods, onSubmit, onError, n };
 };

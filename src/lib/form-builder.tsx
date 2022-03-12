@@ -20,7 +20,6 @@ export const FormBuilder = <
   props: React.PropsWithChildren<FormBuilderProps<TFieldType, TContext>>
 ): ReturnType<React.FC> => {
   const methods = useFormBuilder(props);
-
   return (
     <FormBuilderProvider {...methods}>
       {props.children instanceof Function ? props.children(methods) : props.children}

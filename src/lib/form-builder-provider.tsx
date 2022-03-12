@@ -12,18 +12,16 @@ export const FormBuilderProvider = <
   TFieldType extends AnyObject = AnyObject,
   TContext extends AnyObject = AnyObject
 >({
-  onError = (...args) => console.error(args),
-  onSubmit = () => null,
+  onError,
+  onSubmit,
   children,
   ...methods
 }: React.PropsWithChildren<
   FormBuilderProviderProps<TFieldType, TContext>
->): ReturnType<React.FC> => {
-  return (
-    <FormProvider {...methods}>
-      <handleSubmitContext.Provider value={methods.handleSubmit(onSubmit, onError)}>
-        {children}
-      </handleSubmitContext.Provider>
-    </FormProvider>
-  );
-};
+>): ReturnType<React.FC> => (
+  <FormProvider {...methods}>
+    <handleSubmitContext.Provider value={methods.handleSubmit(onSubmit, onError)}>
+      {children}
+    </handleSubmitContext.Provider>
+  </FormProvider>
+);
