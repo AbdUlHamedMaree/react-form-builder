@@ -107,6 +107,10 @@ export const ResolvedMultiFileInput = React.memo(
           <FilesDropzone
             {...filesDropzoneProps}
             loading={loading}
+            inputProps={{
+              name,
+              onBlur,
+            }}
             files={result.map(el => el.preview)}
             onDrop={handleDrop}
             onRemove={handleRemove}

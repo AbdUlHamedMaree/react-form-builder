@@ -26,6 +26,7 @@ export const ResolvedTextInput = React.memo(
         ref={forwardRef}
         inputRef={mergeRefs(loadingTextFieldProps?.inputRef, ref)}
         value={value}
+        name={name}
         onChange={mergeFunctions(onChange, loadingTextFieldProps?.onChange)}
         onBlur={mergeFunctions(onBlur, loadingTextFieldProps?.onBlur)}
         label={label}

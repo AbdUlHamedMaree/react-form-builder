@@ -59,11 +59,23 @@ export type FilesDropzoneProps = {
   onRemoveAll?: () => void;
   loading?: boolean;
   labels?: ImagesDropzoneLabels;
+  inputProps?: React.DetailedHTMLProps<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  >;
 } & DropzoneOptions;
 
 export const FilesDropzone = forwardRef<HTMLInputElement, FilesDropzoneProps>(
   (
-    { files = [], onRemove, onRemoveAll, loading, labels = defaultLabels, ...options },
+    {
+      files = [],
+      onRemove,
+      onRemoveAll,
+      loading,
+      labels = defaultLabels,
+      inputProps,
+      ...options
+    },
     ref
   ) => {
     if (!useDropzone)
@@ -113,7 +125,7 @@ export const FilesDropzone = forwardRef<HTMLInputElement, FilesDropzoneProps>(
             ref={rootRef}
             {...getRootProps()}
           >
-            <input ref={mergeRefs(inputRef, ref)} {...getInputProps()} />
+            <input {...inputProps} {...getInputProps()} ref={mergeRefs(inputRef, ref)} />
             <Box>
               <img
                 alt='Select file'

@@ -36,6 +36,7 @@ export const ResolvedSelectInput = React.memo(
       <LoadingTextField
         {...loadingTextFieldProps}
         ref={forwardRef}
+        name={name}
         value={value}
         label={label}
         inputRef={mergeRefs(ref, loadingTextFieldProps?.inputRef)}
@@ -55,7 +56,7 @@ export const ResolvedSelectInput = React.memo(
         }
         select
       >
-        <MenuItem value={undefined}>
+        <MenuItem value=''>
           <em>
             <b>None</b>
           </em>

@@ -43,6 +43,7 @@ export const ResolvedSwitchInput = React.memo(
               <Switch
                 {...switchProps}
                 ref={forwardRef}
+                name={name}
                 onChange={mergeFunctions(onChange, switchProps?.onChange)}
                 onBlur={mergeFunctions(onBlur, switchProps?.onBlur)}
                 inputRef={mergeRefs(ref, switchProps?.inputRef)}

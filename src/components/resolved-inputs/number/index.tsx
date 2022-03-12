@@ -25,6 +25,7 @@ export const ResolvedNumberInput = React.memo(
         {...loadingTextFieldProps}
         ref={forwardRef}
         inputRef={mergeRefs(ref, loadingTextFieldProps?.inputRef)}
+        name={name}
         value={value}
         label={label}
         onChange={mergeFunctions(onChange, loadingTextFieldProps?.onChange)}

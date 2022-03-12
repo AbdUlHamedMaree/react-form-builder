@@ -54,6 +54,7 @@ export const ResolvedDateInput = React.memo(
                 </>
               ),
             }}
+            name={name}
             label={label}
             onBlur={mergeFunctions(onBlur, loadingTextFieldProps?.onBlur)}
             error={invalid}

@@ -55,6 +55,7 @@ export const ResolvedTimeInput = React.memo(
                   </>
                 ),
               }}
+              name={name}
               onBlur={mergeFunctions(onBlur, loadingTextFieldProps?.onBlur)}
               error={invalid}
               helperText={

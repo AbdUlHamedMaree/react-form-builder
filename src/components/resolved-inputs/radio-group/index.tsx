@@ -61,6 +61,7 @@ export const ResolvedRadioGroupInput = React.memo(
           <RadioGroup
             {...radioGroupProps}
             ref={mergeRefs(ref, forwardRef)}
+            name={name}
             value={value}
             onChange={mergeFunctions(onChange, radioGroupProps?.onChange)}
             onBlur={mergeFunctions(onBlur, radioGroupProps?.onBlur)}

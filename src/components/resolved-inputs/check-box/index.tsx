@@ -51,6 +51,7 @@ export const ResolvedCheckBoxInput = React.memo(
             control={
               <Checkbox
                 {...checkboxProps}
+                name={name}
                 ref={forwardedRef}
                 checked={value}
                 value={value}

@@ -24,6 +24,7 @@ export const ResolvedPasswordInput = React.memo(
       return (
         <LoadingTextField
           {...loadingTextFieldProps}
+          name={name}
           ref={forwardRef}
           inputRef={mergeRefs(ref, loadingTextFieldProps?.inputRef)}
           value={value}

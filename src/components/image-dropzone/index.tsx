@@ -46,11 +46,23 @@ export type FileDropzoneProps = {
   onRemoveAll?: () => void;
   loading?: boolean;
   labels?: ImageDropzoneLabels;
+  inputProps?: React.DetailedHTMLProps<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  >;
 } & DropzoneOptions;
 
 export const FileDropzone = forwardRef<HTMLInputElement, FileDropzoneProps>(
   (
-    { file = '', onRemove, onRemoveAll, loading, labels = defaultLabels, ...options },
+    {
+      file = '',
+      onRemove,
+      onRemoveAll,
+      loading,
+      labels = defaultLabels,
+      inputProps,
+      ...options
+    },
     ref
   ) => {
     if (!useDropzone)
@@ -103,7 +115,7 @@ export const FileDropzone = forwardRef<HTMLInputElement, FileDropzoneProps>(
             ref={rootRef}
             {...getRootProps()}
           >
-            <input ref={mergeRefs(inputRef, ref)} {...getInputProps()} />
+            <input {...inputProps} {...getInputProps()} ref={mergeRefs(inputRef, ref)} />
             <Avatar
               sx={{
                 width: '100%',

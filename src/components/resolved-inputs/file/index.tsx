@@ -107,6 +107,10 @@ export const ResolvedFileInput = React.memo(
           {...fileDropzoneProps}
           loading={loading}
           maxFiles={1}
+          inputProps={{
+            name,
+            onBlur,
+          }}
           file={result?.preview}
           ref={mergeRefs(ref, forwardRef)}
           onDrop={mergeFunctions(handleDrop, fileDropzoneProps?.onDrop)}

@@ -64,6 +64,7 @@ export const ResolvedMultiSelectInput = React.memo(
           <Select
             {...selectProps}
             ref={forwardRef}
+            name={name}
             inputRef={mergeRefs(ref, selectProps?.inputRef)}
             renderValue={selected => (
               <Box
