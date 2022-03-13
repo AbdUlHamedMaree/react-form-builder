@@ -1,7 +1,6 @@
 import { defineConfig } from 'rollup';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import dts from 'rollup-plugin-dts';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import { swc, defineRollupSwcOption } from 'rollup-plugin-swc3';
 
@@ -15,14 +14,16 @@ export default defineConfig([
       {
         dir: dirname(packageJson.module),
         format: 'esm',
-        sourcemap: 'inline',
+        entryFileNames: '[name].js',
+        sourcemap: true,
         preserveModules: true,
         strict: true,
       },
       {
         dir: dirname(packageJson.main),
         format: 'cjs',
-        sourcemap: 'inline',
+        entryFileNames: '[name].cjs',
+        sourcemap: true,
         preserveModules: true,
         strict: true,
         esModule: false,
@@ -61,16 +62,5 @@ export default defineConfig([
         })
       ),
     ],
-  },
-  {
-    input: packageJson.source,
-    output: [
-      {
-        dir: dirname(packageJson.types),
-        format: 'esm',
-        preserveModules: true,
-      },
-    ],
-    plugins: [dts()],
   },
 ]);
