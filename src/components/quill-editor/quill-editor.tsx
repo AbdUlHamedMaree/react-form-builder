@@ -4,7 +4,6 @@ import { styled, Theme } from '@mui/material';
 import { MUIStyledCommonProps } from '@mui/system';
 import { StyledComponent } from '@emotion/styled';
 import { DynamicOptions, Loader } from 'next/dynamic';
-// import Quill from 'react-quill';
 import { BaseQuillEditorProps, QuillEditorClassType } from './types';
 
 type Dynamic = <P = {}>(
@@ -25,7 +24,13 @@ if (dynamic === undefined) {
 let Quill = (globalThis as { Quill?: React.ComponentType<BaseQuillEditorProps> })?.Quill;
 
 if (Quill === undefined) {
-  if (dynamic) Quill = dynamic(() => import('react-quill'), { ssr: false });
+  if (dynamic) {
+    try {
+      Quill = dynamic(() => import('react-quill'), { ssr: false });
+    } catch (err) {
+      //
+    }
+  }
 
   try {
     Quill = require('react-quill');
