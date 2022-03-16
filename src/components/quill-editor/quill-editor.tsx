@@ -3,37 +3,36 @@
 import { styled, Theme } from '@mui/material';
 import { MUIStyledCommonProps } from '@mui/system';
 import { StyledComponent } from '@emotion/styled';
-import { DynamicOptions, Loader } from 'next/dynamic';
 import { BaseQuillEditorProps, QuillEditorClassType } from './types';
 
-type Dynamic = <P = {}>(
-  dynamicOptions: DynamicOptions<P> | Loader<P>,
-  options?: DynamicOptions<P> | undefined
-) => React.ComponentType<P>;
+// type Dynamic = <P = {}>(
+//   dynamicOptions: DynamicOptions<P> | Loader<P>,
+//   options?: DynamicOptions<P> | undefined
+// ) => React.ComponentType<P>;
 
-let dynamic = (globalThis as { dynamic?: Dynamic })?.dynamic;
+// let dynamic = (globalThis as { dynamic?: Dynamic })?.dynamic;
 
-if (dynamic === undefined) {
-  try {
-    dynamic = require('next/dynamic').default;
-  } catch (err) {
-    //
-  }
-}
+// if (dynamic === undefined) {
+//   try {
+//     dynamic = require('next/dynamic').default;
+//   } catch (err) {
+//     //
+//   }
+// }
 
 let Quill = (globalThis as { Quill?: React.ComponentType<BaseQuillEditorProps> })?.Quill;
 
 if (Quill === undefined) {
-  if (dynamic) {
-    try {
-      Quill = dynamic(() => import('react-quill'), { ssr: false });
-    } catch (err) {
-      //
-    }
-  }
+  // if (dynamic) {
+  //   try {
+  //     Quill = dynamic(() => import('react-quill').catch(() => {}), { ssr: false });
+  //   } catch (err) {
+  //     //
+  //   }
+  // }
 
   try {
-    Quill = require('react-quill');
+    if (typeof window !== 'undefined') Quill = require('react-quill');
   } catch (err) {
     //
   }
