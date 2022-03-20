@@ -1,3 +1,96 @@
+# @mrii/react-form-builder
+
+library to easily build forms using react-hook-form, MUI & yup.
+
+compatible with Next Js (for )
+
+## Install
+
+```sh
+yarn add @mrii/react-form-builder
+
+# or using npm
+
+npm i @mrii/react-form-builder
+```
+
+## Basic Examples
+
+### _Very simple form_:
+
+```tsx
+import { useCallback } from 'react';
+import { FormBuilder, FormSubmitInput, TextInput } from '@mrii/react-form-builder';
+import { Box } from '@mui/material';
+
+const Form = () => {
+  const onSubmit = useCallback(async values => {
+    await new Promise(res => {
+      setTimeout(res, 2000);
+    });
+    console.log({ values });
+  }, []);
+
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 300, mx: 'auto' }}>
+      <FormBuilder onSubmit={onSubmit} useFormProps={{ defaultValues: { title: '' } }}>
+        <TextInput name='title' label='Title' />
+        <FormSubmitInput size='large' variant='contained' sx={{ mt: 2 }}>
+          Submit
+        </FormSubmitInput>
+      </FormBuilder>
+    </Box>
+  );
+};
+```
+
+or using typescript
+
+```tsx
+import { useCallback } from 'react';
+import { FormBuilder, FormSubmitInput, TextInput } from '@mrii/react-form-builder';
+import { Box } from '@mui/material';
+import { SubmitHandler } from 'react-hook-form';
+
+type FormFields = {
+  title: string;
+};
+
+const Form: React.VFC = () => {
+  const onSubmit = useCallback<SubmitHandler<FormFields>>(async values => {
+    await new Promise(res => {
+      setTimeout(res, 2000);
+    });
+    console.log({ values });
+  }, []);
+
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 300, mx: 'auto' }}>
+      <FormBuilder<FormFields>
+        onSubmit={onSubmit}
+        useFormProps={{ defaultValues: { title: '' } }}
+      >
+        <TextInput name='title' label='Title' />
+        <FormSubmitInput size='large' variant='contained' sx={{ mt: 2 }}>
+          Submit
+        </FormSubmitInput>
+      </FormBuilder>
+    </Box>
+  );
+};
+```
+
+the result:
+
+![simple form result](./docs/simple-form.png)
+
+once you click submit the button will be in loading state while the `onSubmit` promise in pending:
+
+![simple form result](./docs/simple-form-loading.png)
+
+### _Basic form_:
+
+```tsx
 import { useCallback } from 'react';
 import {
   DateInput,
@@ -101,5 +194,8 @@ const Form: React.VFC = () => {
     </LocalizationProvider>
   );
 };
+```
 
-export default Form;
+the result:
+
+![Basic Form Example](./docs/basic-form.png)

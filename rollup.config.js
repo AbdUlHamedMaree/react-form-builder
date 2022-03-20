@@ -14,7 +14,7 @@ export default defineConfig([
       {
         dir: dirname(packageJson.module),
         format: 'esm',
-        entryFileNames: '[name].js',
+        entryFileNames: '[name].mjs',
         sourcemap: true,
         preserveModules: true,
         strict: true,
@@ -22,16 +22,14 @@ export default defineConfig([
       {
         dir: dirname(packageJson.main),
         format: 'cjs',
-        entryFileNames: '[name].cjs',
+        entryFileNames: '[name].js',
         sourcemap: true,
         preserveModules: true,
         strict: true,
         esModule: false,
       },
     ],
-    treeshake: {
-      moduleSideEffects: false,
-    },
+    treeshake: 'smallest',
     plugins: [
       peerDepsExternal(),
       nodeResolve(),

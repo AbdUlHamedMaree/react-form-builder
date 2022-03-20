@@ -1,8 +1,11 @@
 import React from 'react';
-import { UseFormReturn } from 'react-hook-form';
 import { AnyObject } from '../types';
 import { FormBuilderProvider } from './form-builder-provider';
-import { useFormBuilder, UseFormBuilderOptions } from './use-form-builder';
+import {
+  useFormBuilder,
+  UseFormBuilderOptions,
+  UseFormBuilderReturn,
+} from './use-form-builder';
 
 export type FormBuilderProps<
   TFieldType extends AnyObject = AnyObject,
@@ -10,7 +13,7 @@ export type FormBuilderProps<
 > = {
   children?:
     | React.ReactNode
-    | ((methods: UseFormReturn<TFieldType, TContext>) => React.ReactNode);
+    | ((methods: UseFormBuilderReturn<TFieldType, TContext>) => React.ReactNode);
 } & UseFormBuilderOptions<TFieldType, TContext>;
 
 export const FormBuilder = <

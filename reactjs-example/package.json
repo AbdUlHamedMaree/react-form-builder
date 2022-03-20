@@ -2,6 +2,7 @@
   "name": "reactjs-example",
   "version": "0.1.0",
   "private": true,
+  "type": "commonjs",
   "dependencies": {
     "@mrii/react-form-builder": "link:..",
     "@types/node": "link:../node_modules/@types/node",
