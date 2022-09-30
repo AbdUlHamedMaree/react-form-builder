@@ -1,7 +1,6 @@
 /node_modules
 /build
 /dist
-/.next
 /.env.development
 /.env.example
 /.env.production

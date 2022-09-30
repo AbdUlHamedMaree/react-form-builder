@@ -20,7 +20,7 @@ export const FormBuilder = <
   TFieldType extends AnyObject = AnyObject,
   TContext extends AnyObject = AnyObject
 >(
-  props: React.PropsWithChildren<FormBuilderProps<TFieldType, TContext>>
+  props: FormBuilderProps<TFieldType, TContext>
 ): ReturnType<React.FC> => {
   const methods = useFormBuilder(props);
   return (

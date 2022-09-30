@@ -9,7 +9,7 @@ import { ResolvedInputProps } from '../../../types';
 
 export type ResolvedSelectInputProps = ResolvedInputProps<
   {
-    loadingTextFieldProps?: LoadingTextFieldProps;
+    loadingTextFieldProps?: LoadingTextFieldProps & { emptyItemLabel?: React.ReactNode };
     menuItemProps?: MenuItemProps;
   },
   {
@@ -58,7 +58,7 @@ export const ResolvedSelectInput = React.memo(
       >
         <MenuItem value=''>
           <em>
-            <b>None</b>
+            <b>{loadingTextFieldProps?.emptyItemLabel ?? '-----'}</b>
           </em>
         </MenuItem>
         {Object.entries(items).map(([k, v]) => (
