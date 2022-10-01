@@ -1,13 +1,13 @@
-/node_modules
-/build
-/dist
-/.env.development
-/.env.example
-/.env.production
-/.gitignore
-/.husky
-/.prettierignore
-/yarn.lock
+node_modules
+build
+dist
+dest
+.next
+.env*
+.gitignore
+.husky
+.prettierignore
+yarn.lock
 
 *.png
 *.svg

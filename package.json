@@ -1,6 +1,6 @@
 {
   "name": "@mrii/react-form-builder",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": false,
   "sideEffects": false,
   "description": "library to easily build forms using react-hook-form, MUI & yup",
@@ -43,9 +43,9 @@
   ],
   "scripts": {
     "build": "rimraf dist && rollup -c && yarn tsc",
-    "build:watch": "concurrently \"rollup -c -w\" \"yarn tsc -w\"",
-    "example:next": "concurrently \"yarn build:watch\" \"cd ./nextjs-example && yarn dev\"",
-    "example:react": "concurrently \"yarn build:watch\" \"cd ./reactjs-example && yarn start\"",
+    "build:watch": "concurrently -k \"rollup -c -w\" \"yarn tsc -w\"",
+    "example:next": "concurrently -k \"yarn build:watch\" \"yarn --cwd nextjs-example dev\"",
+    "example:react": "concurrently -k \"yarn build:watch\" \"yarn --cwd reactjs-example start\"",
     "test": "jest",
     "lint": "yarn type-check && yarn eslint --quiet",
     "lint:fix": "yarn eslint --fix",

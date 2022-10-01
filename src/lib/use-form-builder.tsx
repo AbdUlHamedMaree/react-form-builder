@@ -35,7 +35,7 @@ export const useFormBuilder = <
   validation = object(),
   onSubmit = () => null,
   // eslint-disable-next-line no-console
-  onError = (...args) => console.error(args),
+  onError = (...args) => console.error(`[react-form-builder:submit-error]`, ...args),
   ...useFormProps
 }: UseFormBuilderOptions<TFieldType, TContext>): UseFormBuilderReturn<
   TFieldType,

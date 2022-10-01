@@ -33,7 +33,7 @@ export const App: React.VFC = () => {
       <FormBuilder
         onSubmit={onSubmit}
         validation={schema}
-        useFormProps={{ defaultValues: { approved: false, asd: '', title: '' } }}
+        defaultValues={{ approved: false, asd: '', title: '' }}
       >
         <TextInput size='small' margin='dense' name='title' label='Title' fullWidth />
         <SwitchInput name='approved' label='Approve' />

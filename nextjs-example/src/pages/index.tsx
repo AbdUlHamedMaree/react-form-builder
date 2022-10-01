@@ -59,9 +59,7 @@ const Form: React.VFC = () => {
         <FormBuilder<FormFields>
           validation={schema}
           onSubmit={onSubmit}
-          useFormProps={{
-            defaultValues,
-          }}
+          defaultValues={defaultValues}
         >
           <TextInput
             name='firstName'

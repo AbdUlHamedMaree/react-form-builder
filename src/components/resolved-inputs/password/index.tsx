@@ -2,7 +2,7 @@ import { useController } from 'react-hook-form';
 import React from 'react';
 
 import { exposeMessage } from '../../../utils/expose-message';
-import { LoadingTextField, LoadingTextFieldProps } from '../../loading-text-field';
+import { LoadingTextFieldProps } from '../../loading-text-field';
 import { mergeFunctions, mergeRefs } from '../../../utils';
 import { ResolvedInputProps } from '../../../types';
 import { PasswordField } from '../../password-field';
