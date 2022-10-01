@@ -14,11 +14,10 @@ export type UseFormBuilderOptions<
   TFieldType extends AnyObject = AnyObject,
   TContext extends AnyObject = AnyObject
 > = {
-  useFormProps?: NewUseFormProps<TFieldType, TContext>;
   validation?: AnyObjectSchema;
   onSubmit?: SubmitHandler<TFieldType>;
   onError?: SubmitErrorHandler<TFieldType>;
-};
+} & NewUseFormProps<TFieldType, TContext>;
 
 export type UseFormBuilderReturn<
   TFieldType extends AnyObject = AnyObject,
@@ -33,14 +32,11 @@ export const useFormBuilder = <
   TFieldType extends AnyObject = AnyObject,
   TContext extends AnyObject = AnyObject
 >({
-  useFormProps = {
-    criteriaMode: 'firstError',
-    shouldFocusError: true,
-  },
   validation = object(),
   onSubmit = () => null,
   // eslint-disable-next-line no-console
   onError = (...args) => console.error(args),
+  ...useFormProps
 }: UseFormBuilderOptions<TFieldType, TContext>): UseFormBuilderReturn<
   TFieldType,
   TContext
