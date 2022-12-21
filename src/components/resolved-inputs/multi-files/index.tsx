@@ -1,19 +1,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, memo, forwardRef } from 'react';
 import { useController } from 'react-hook-form';
-import {
-  Paper,
-  Typography,
-  FormHelperText,
-  FormHelperTextProps,
-  PaperProps,
-  TypographyProps,
-} from '@mui/material';
-import { exposeMessage } from '../../../utils/expose-message';
-import { mergeFunctions, mergeRefs } from '../../../utils';
-import { FilesDropzoneProps, FilesDropzone } from '../../images-dropzone';
-import { FileWithPreview, ResolvedInputProps } from '../../../types';
+import type { FormHelperTextProps, PaperProps, TypographyProps } from '@mui/material';
+import { Paper, Typography, FormHelperText } from '@mui/material';
+import { mergeRefs } from '$utils/merge-refs';
+import { mergeFunctions } from '$utils/merge-functions';
+import type { FileWithPreview, ResolvedInputProps } from '$types';
+import { exposeMessage } from '$utils/expose-message';
+import type { FilesDropzoneProps } from '$components/images-dropzone';
+import { FilesDropzone } from '$components/images-dropzone';
 
 export type ResolvedMultiFileInputProps = ResolvedInputProps<
   {
@@ -27,8 +23,8 @@ export type ResolvedMultiFileInputProps = ResolvedInputProps<
   }
 >;
 
-export const ResolvedMultiFileInput = React.memo(
-  React.forwardRef<HTMLInputElement, ResolvedMultiFileInputProps>(
+export const ResolvedMultiFileInput = memo(
+  forwardRef<HTMLInputElement, ResolvedMultiFileInputProps>(
     function ResolvedMultiFileInput(
       {
         useControllerProps,
@@ -41,16 +37,24 @@ export const ResolvedMultiFileInput = React.memo(
           typographyProps,
         },
       },
-      forwardRef
+      forwardedRef
     ) {
       const {
         field: { name, onBlur, onChange, ref, value },
-        fieldState: { invalid, error },
+        fieldState: { error, isTouched },
       } = useController(useControllerProps);
 
       const [loading, setLoading] = useState(false);
-
       const [result, setResult] = useState((value ?? []) as FileWithPreview[]);
+
+      const showError = useMemo(
+        () => !!(!loading && error && isTouched),
+        [loading, error, isTouched]
+      );
+      const errorMessage = useMemo(
+        () => exposeMessage(error, name, label),
+        [error, label, name]
+      );
 
       useEffect(() => {
         onChange(result);
@@ -80,6 +84,36 @@ export const ResolvedMultiFileInput = React.memo(
         onBlur();
       }, [onBlur]);
 
+      const inputRef = useMemo(() => mergeRefs(ref, forwardedRef), [ref, forwardedRef]);
+      const memoOnDrop = useMemo(
+        () => mergeFunctions(handleDrop, filesDropzoneProps?.onDrop),
+        [handleDrop, filesDropzoneProps?.onDrop]
+      );
+      const memoOnRemove = useMemo(
+        () => mergeFunctions(handleRemove, filesDropzoneProps?.onRemove),
+        [handleRemove, filesDropzoneProps?.onRemove]
+      );
+      const memoOnRemoveAll = useMemo(
+        () => mergeFunctions(handleRemoveAll, filesDropzoneProps?.onRemoveAll),
+        [handleRemoveAll, filesDropzoneProps?.onRemoveAll]
+      );
+      const memoOnDragLeave = useMemo(
+        () => mergeFunctions(onBlur, filesDropzoneProps?.onDragLeave),
+        [onBlur, filesDropzoneProps?.onDragLeave]
+      );
+      const memoOnDropAccepted = useMemo(
+        () => mergeFunctions(onBlur, filesDropzoneProps?.onDropAccepted),
+        [onBlur, filesDropzoneProps?.onDropAccepted]
+      );
+      const memoOnDropRejected = useMemo(
+        () => mergeFunctions(onBlur, filesDropzoneProps?.onDropRejected),
+        [onBlur, filesDropzoneProps?.onDropRejected]
+      );
+      const memoOnFileDialogCancel = useMemo(
+        () => mergeFunctions(onBlur, filesDropzoneProps?.onFileDialogCancel),
+        [onBlur, filesDropzoneProps?.onFileDialogCancel]
+      );
+
       return (
         <Paper
           variant='outlined'
@@ -88,8 +122,7 @@ export const ResolvedMultiFileInput = React.memo(
             padding: t => t.spacing(2),
             backgroundColor: '#ffffff00',
             ...paperProps?.sx,
-            borderColor: t =>
-              !loading && invalid ? t.palette.error.main : t.palette.divider,
+            borderColor: t => (showError ? t.palette.error.main : t.palette.divider),
           }}
         >
           <Typography
@@ -106,31 +139,29 @@ export const ResolvedMultiFileInput = React.memo(
 
           <FilesDropzone
             {...filesDropzoneProps}
+            ref={inputRef}
             loading={loading}
             inputProps={{
               name,
               onBlur,
             }}
             files={result.map(el => el.preview)}
-            onDrop={handleDrop}
-            onRemove={handleRemove}
-            onRemoveAll={handleRemoveAll}
-            onDragLeave={mergeFunctions(onBlur, filesDropzoneProps?.onDragLeave)}
-            onDropAccepted={mergeFunctions(onBlur, filesDropzoneProps?.onDropAccepted)}
-            onDropRejected={mergeFunctions(onBlur, filesDropzoneProps?.onDropRejected)}
-            onFileDialogCancel={mergeFunctions(
-              onBlur,
-              filesDropzoneProps?.onFileDialogCancel
-            )}
-            ref={mergeRefs(ref, forwardRef)}
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
+            onDrop={memoOnDrop}
+            onRemove={memoOnRemove}
+            onRemoveAll={memoOnRemoveAll}
+            onDragLeave={memoOnDragLeave}
+            onDropAccepted={memoOnDropAccepted}
+            onDropRejected={memoOnDropRejected}
+            onFileDialogCancel={memoOnFileDialogCancel}
           />
-          {!loading && error && (
+          {showError && (
             <FormHelperText
               {...formHelperTextProps}
               error
               sx={{ mt: 2, ...formHelperTextProps?.sx }}
             >
-              {exposeMessage(error, name, typeof label === 'string' ? label : name)}
+              {errorMessage}
             </FormHelperText>
           )}
         </Paper>

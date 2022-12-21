@@ -1,8 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { ResolvedDateTimeInput, ResolvedDateTimeInputProps } from '../../resolved-inputs';
-import { stringToLabel } from '../../../utils';
-import { FinalInputProps } from '../../../types';
+import { stringToLabel } from '$utils/string-to-label';
+import type { FinalInputProps } from '$types';
+import type { ResolvedDateTimeInputProps } from '$components/resolved-inputs';
+import { ResolvedDateTimeInput } from '$components/resolved-inputs/date-time';
 
 export type DateTimeInputProps = FinalInputProps<
   ResolvedDateTimeInputProps,

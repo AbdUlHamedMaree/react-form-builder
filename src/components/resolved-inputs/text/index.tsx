@@ -1,41 +1,58 @@
-import React from 'react';
+import React, { useMemo, memo, forwardRef } from 'react';
 import { useController } from 'react-hook-form';
 
-import { mergeRefs, mergeFunctions } from '../../../utils';
-import { exposeMessage } from '../../../utils/expose-message';
-import { LoadingTextField, LoadingTextFieldProps } from '../../loading-text-field';
-import { ResolvedInputProps } from '../../../types';
+import { mergeRefs } from '$utils/merge-refs';
+import { mergeFunctions } from '$utils/merge-functions';
+import type { ResolvedInputProps } from '$types';
+import { exposeMessage } from '$utils/expose-message';
+import type { LoadingTextFieldProps } from '$components/loading-text-field';
+import { LoadingTextField } from '$components/loading-text-field';
 
 export type ResolvedTextInputProps = ResolvedInputProps<{
   loadingTextFieldProps?: LoadingTextFieldProps;
 }>;
 
-export const ResolvedTextInput = React.memo(
-  React.forwardRef<HTMLDivElement, ResolvedTextInputProps>(function ResolvedTextInput(
+export const ResolvedTextInput = memo(
+  forwardRef<HTMLDivElement, ResolvedTextInputProps>(function ResolvedTextInput(
     { useControllerProps, label, componentsProps: { loadingTextFieldProps } },
-    forwardRef
+    forwardedRef
   ) {
     const {
       field: { name, onBlur, onChange, ref, value },
-      fieldState: { invalid, error },
+      fieldState: { error, isTouched },
     } = useController(useControllerProps);
+
+    const showError = useMemo(() => !!(error && isTouched), [error, isTouched]);
+    const errorMessage = useMemo(
+      () => exposeMessage(error, name, label),
+      [error, label, name]
+    );
+
+    const inputRef = useMemo(
+      () => mergeRefs(loadingTextFieldProps?.inputRef, ref),
+      [loadingTextFieldProps?.inputRef, ref]
+    );
+    const handleChange = useMemo(
+      () => mergeFunctions(onChange, loadingTextFieldProps?.onChange),
+      [onChange, loadingTextFieldProps?.onChange]
+    );
+    const handleBlur = useMemo(
+      () => mergeFunctions(onBlur, loadingTextFieldProps?.onBlur),
+      [onBlur, loadingTextFieldProps?.onBlur]
+    );
 
     return (
       <LoadingTextField
         {...loadingTextFieldProps}
-        ref={forwardRef}
-        inputRef={mergeRefs(loadingTextFieldProps?.inputRef, ref)}
+        ref={forwardedRef}
+        inputRef={inputRef}
         value={value}
         name={name}
-        onChange={mergeFunctions(onChange, loadingTextFieldProps?.onChange)}
-        onBlur={mergeFunctions(onBlur, loadingTextFieldProps?.onBlur)}
+        onChange={handleChange}
+        onBlur={handleBlur}
         label={label}
-        error={invalid}
-        helperText={
-          error
-            ? exposeMessage(error, name, typeof label === 'string' ? label : name)
-            : undefined
-        }
+        error={showError}
+        helperText={showError ? errorMessage : undefined}
       />
     );
   })

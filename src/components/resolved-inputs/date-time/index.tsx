@@ -1,73 +1,89 @@
 import { useController } from 'react-hook-form';
-import { DateTimePicker, DateTimePickerProps } from '@mui/lab';
-import React from 'react';
+import type { DateTimePickerProps } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers';
+import { useMemo, memo, forwardRef } from 'react';
 
-import { exposeMessage } from '../../../utils/expose-message';
-import { LoadingTextField, LoadingTextFieldProps } from '../../loading-text-field';
-import { mergeFunctions, mergeRefs } from '../../../utils';
-import { ResolvedInputProps } from '../../../types';
+import { exposeMessage } from '$utils/expose-message';
+import { mergeRefs } from '$utils/merge-refs';
+import { mergeFunctions } from '$utils/merge-functions';
+import type { ResolvedInputProps } from '$types';
+import type { LoadingTextFieldProps } from '$components/loading-text-field';
+import { LoadingTextField } from '$components/loading-text-field';
 
 export type ResolvedDateTimeInputProps = ResolvedInputProps<{
   loadingTextFieldProps?: LoadingTextFieldProps;
-  dateTimePickerProps?: Partial<DateTimePickerProps<Date>>;
+  dateTimePickerProps?: Partial<DateTimePickerProps<string, Date>>;
 }>;
 
-export const ResolvedDateTimeInput = React.memo(
-  React.forwardRef<HTMLDivElement, ResolvedDateTimeInputProps>(
-    function ResolvedDateTimeInput(
-      {
-        useControllerProps,
-        label,
-        componentsProps: { dateTimePickerProps, loadingTextFieldProps },
-      },
-      forwardRef
-    ) {
-      const {
-        field: { name, onBlur, onChange, ref, value },
-        fieldState: { invalid, error },
-      } = useController(useControllerProps);
+export const ResolvedDateTimeInput = memo(
+  forwardRef<HTMLDivElement, ResolvedDateTimeInputProps>(function ResolvedDateTimeInput(
+    {
+      useControllerProps,
+      label,
+      componentsProps: { dateTimePickerProps, loadingTextFieldProps },
+    },
+    forwardedRef
+  ) {
+    const {
+      field: { name, onBlur, onChange, ref, value },
+      fieldState: { error, isTouched },
+    } = useController(useControllerProps);
 
-      return (
-        <DateTimePicker
-          {...dateTimePickerProps}
-          ref={forwardRef}
-          value={value}
-          label={label}
-          inputRef={mergeRefs(ref, dateTimePickerProps?.inputRef)}
-          onChange={mergeFunctions(onChange, dateTimePickerProps?.onChange)}
-          renderInput={params => (
-            <LoadingTextField
-              {...loadingTextFieldProps}
-              {...params}
-              InputProps={{
-                ...loadingTextFieldProps?.InputProps,
-                ...params?.InputProps,
-                endAdornment: (
-                  <>
-                    {loadingTextFieldProps?.InputProps?.endAdornment}
-                    {params?.InputProps?.endAdornment}
-                  </>
-                ),
-                startAdornment: (
-                  <>
-                    {loadingTextFieldProps?.InputProps?.startAdornment}
-                    {params?.InputProps?.startAdornment}
-                  </>
-                ),
-              }}
-              name={name}
-              onBlur={mergeFunctions(onBlur, loadingTextFieldProps?.onBlur)}
-              error={invalid}
-              label={label}
-              helperText={
-                error
-                  ? exposeMessage(error, name, typeof label === 'string' ? label : name)
-                  : undefined
-              }
-            />
-          )}
-        />
-      );
-    }
-  )
+    const showError = useMemo(() => !!(error && isTouched), [error, isTouched]);
+    const errorMessage = useMemo(
+      () => exposeMessage(error, name, label),
+      [error, label, name]
+    );
+
+    const inputRef = useMemo(
+      () => mergeRefs(ref, dateTimePickerProps?.inputRef),
+      [dateTimePickerProps?.inputRef, ref]
+    );
+    const handleChange = useMemo(
+      () => mergeFunctions(onChange, dateTimePickerProps?.onChange),
+      [dateTimePickerProps?.onChange, onChange]
+    );
+    const handleBlur = useMemo(
+      () => mergeFunctions(onBlur, loadingTextFieldProps?.onBlur),
+      [loadingTextFieldProps?.onBlur, onBlur]
+    );
+
+    return (
+      <DateTimePicker
+        {...dateTimePickerProps}
+        ref={forwardedRef}
+        value={value}
+        label={label}
+        inputRef={inputRef}
+        onChange={handleChange}
+        renderInput={params => (
+          <LoadingTextField
+            {...loadingTextFieldProps}
+            {...params}
+            InputProps={{
+              ...loadingTextFieldProps?.InputProps,
+              ...params?.InputProps,
+              endAdornment: (
+                <>
+                  {loadingTextFieldProps?.InputProps?.endAdornment}
+                  {params?.InputProps?.endAdornment}
+                </>
+              ),
+              startAdornment: (
+                <>
+                  {loadingTextFieldProps?.InputProps?.startAdornment}
+                  {params?.InputProps?.startAdornment}
+                </>
+              ),
+            }}
+            name={name}
+            onBlur={handleBlur}
+            error={showError}
+            label={label}
+            helperText={showError ? errorMessage : undefined}
+          />
+        )}
+      />
+    );
+  })
 );

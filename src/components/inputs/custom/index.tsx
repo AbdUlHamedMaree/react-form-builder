@@ -1,6 +1,8 @@
 import React from 'react';
-import { UseControllerProps, useFormContext } from 'react-hook-form';
-import { ResolvedCustomInput, ResolvedCustomInputProps } from '../../resolved-inputs';
+import type { UseControllerProps } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
+import type { ResolvedCustomInputProps } from '$components/resolved-inputs';
+import { ResolvedCustomInput } from '$components/resolved-inputs/custom';
 
 export type CustomInputProps = {
   name: string;

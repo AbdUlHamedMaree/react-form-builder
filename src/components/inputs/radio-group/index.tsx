@@ -1,11 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import {
-  ResolvedRadioGroupInput,
-  ResolvedRadioGroupInputProps,
-} from '../../resolved-inputs';
-import { stringToLabel } from '../../../utils';
-import { FinalInputProps } from '../../../types';
+import { stringToLabel } from '$utils/string-to-label';
+import type { FinalInputProps } from '$types';
+import type { ResolvedRadioGroupInputProps } from '$components/resolved-inputs';
+import { ResolvedRadioGroupInput } from '$components/resolved-inputs/radio-group';
 
 export type RadioGroupInputProps = FinalInputProps<
   ResolvedRadioGroupInputProps,

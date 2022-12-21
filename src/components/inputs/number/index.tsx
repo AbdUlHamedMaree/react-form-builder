@@ -1,8 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { ResolvedNumberInput, ResolvedNumberInputProps } from '../../resolved-inputs';
-import { stringToLabel } from '../../../utils';
-import { FinalInputProps } from '../../../types';
+import { stringToLabel } from '$utils/string-to-label';
+import type { FinalInputProps } from '$types';
+import type { ResolvedNumberInputProps } from '$components/resolved-inputs';
+import { ResolvedNumberInput } from '$components/resolved-inputs/number';
 
 export type NumberInputProps = FinalInputProps<
   ResolvedNumberInputProps,

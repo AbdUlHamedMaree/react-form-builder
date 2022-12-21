@@ -1,38 +1,60 @@
 import { useController } from 'react-hook-form';
-import { DatePicker, DatePickerProps } from '@mui/lab';
-import React from 'react';
+import type { DatePickerProps } from '@mui/x-date-pickers';
+import { DatePicker } from '@mui/x-date-pickers';
+import { useMemo, memo, forwardRef } from 'react';
 
-import { exposeMessage } from '../../../utils/expose-message';
-import { LoadingTextField, LoadingTextFieldProps } from '../../loading-text-field';
-import { mergeFunctions, mergeRefs } from '../../../utils';
-import { ResolvedInputProps } from '../../../types';
+import { exposeMessage } from '$utils/expose-message';
+import { mergeRefs } from '$utils/merge-refs';
+import { mergeFunctions } from '$utils/merge-functions';
+import type { ResolvedInputProps } from '$types';
+import type { LoadingTextFieldProps } from '$components/loading-text-field';
+import { LoadingTextField } from '$components/loading-text-field';
 
 export type ResolvedDateInputProps = ResolvedInputProps<{
   loadingTextFieldProps?: LoadingTextFieldProps;
-  datePickerProps?: Partial<DatePickerProps<Date>>;
+  datePickerProps?: Partial<DatePickerProps<string, Date>>;
 }>;
 
-export const ResolvedDateInput = React.memo(
-  React.forwardRef<HTMLDivElement, ResolvedDateInputProps>(function ResolvedDateInput(
+export const ResolvedDateInput = memo(
+  forwardRef<HTMLDivElement, ResolvedDateInputProps>(function ResolvedDateInput(
     {
       useControllerProps,
       label,
       componentsProps: { datePickerProps, loadingTextFieldProps },
     },
-    forwardRef
+    forwardedRef
   ) {
     const {
       field: { name, onBlur, onChange, ref, value },
-      fieldState: { invalid, error },
+      fieldState: { error, isTouched },
     } = useController(useControllerProps);
+
+    const showError = useMemo(() => !!(error && isTouched), [error, isTouched]);
+    const errorMessage = useMemo(
+      () => exposeMessage(error, name, label),
+      [error, label, name]
+    );
+
+    const inputRef = useMemo(
+      () => mergeRefs(ref, datePickerProps?.inputRef),
+      [datePickerProps?.inputRef, ref]
+    );
+    const handleChange = useMemo(
+      () => mergeFunctions(onChange, datePickerProps?.onChange),
+      [datePickerProps?.onChange, onChange]
+    );
+    const handleBlur = useMemo(
+      () => mergeFunctions(onBlur, loadingTextFieldProps?.onBlur),
+      [loadingTextFieldProps?.onBlur, onBlur]
+    );
 
     return (
       <DatePicker
         {...datePickerProps}
-        ref={forwardRef}
+        ref={forwardedRef}
         value={value}
-        inputRef={mergeRefs(ref, datePickerProps?.inputRef)}
-        onChange={mergeFunctions(onChange, datePickerProps?.onChange)}
+        inputRef={inputRef}
+        onChange={handleChange}
         label={label}
         renderInput={params => (
           <LoadingTextField
@@ -56,13 +78,9 @@ export const ResolvedDateInput = React.memo(
             }}
             name={name}
             label={label}
-            onBlur={mergeFunctions(onBlur, loadingTextFieldProps?.onBlur)}
-            error={invalid}
-            helperText={
-              error
-                ? exposeMessage(error, name, typeof label === 'string' ? label : name)
-                : undefined
-            }
+            onBlur={handleBlur}
+            error={showError}
+            helperText={showError ? errorMessage : undefined}
           />
         )}
       />

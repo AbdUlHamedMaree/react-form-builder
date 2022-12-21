@@ -1,8 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { UseFormProps } from 'react-hook-form';
-import { AnyObjectSchema } from 'yup';
+import type { UseFormProps } from 'react-hook-form';
+import type { AnyObjectSchema } from 'yup';
 
-import { NewUseFormProps, AnyObject } from '../../types';
+import type { NewUseFormProps, AnyObject } from '$types';
 
 export const getFinalUseFormProps = <
   TFieldType extends AnyObject = AnyObject,

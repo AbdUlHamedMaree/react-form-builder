@@ -1,11 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import {
-  ResolvedMultiFileInput,
-  ResolvedMultiFileInputProps,
-} from '../../resolved-inputs';
-import { stringToLabel } from '../../../utils';
-import { FinalInputProps } from '../../../types';
+import { stringToLabel } from '$utils/string-to-label';
+import type { FinalInputProps } from '$types';
+import type { ResolvedMultiFileInputProps } from '$components/resolved-inputs';
+import { ResolvedMultiFileInput } from '$components/resolved-inputs/multi-files';
 
 export type FileImageInputProps = FinalInputProps<
   ResolvedMultiFileInputProps,

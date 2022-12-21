@@ -1,8 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { ResolvedTimeInput, ResolvedTimeInputProps } from '../../resolved-inputs';
-import { stringToLabel } from '../../../utils';
-import { FinalInputProps } from '../../../types';
+import { stringToLabel } from '$utils/string-to-label';
+import type { FinalInputProps } from '$types';
+import type { ResolvedTimeInputProps } from '$components/resolved-inputs/time';
+import { ResolvedTimeInput } from '$components/resolved-inputs/time';
 
 export type TimeInputProps = FinalInputProps<ResolvedTimeInputProps, 'timePickerProps'>;
 

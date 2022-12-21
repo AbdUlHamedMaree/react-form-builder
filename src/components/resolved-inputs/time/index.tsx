@@ -1,40 +1,62 @@
 import { useController } from 'react-hook-form';
-import { TimePicker, TimePickerProps } from '@mui/lab';
-import React from 'react';
+import type { TimePickerProps } from '@mui/x-date-pickers';
+import { TimePicker } from '@mui/x-date-pickers';
+import React, { useMemo, memo, forwardRef } from 'react';
 
-import { exposeMessage } from '../../../utils/expose-message';
-import { LoadingTextField, LoadingTextFieldProps } from '../../loading-text-field';
-import { mergeFunctions, mergeRefs } from '../../../utils';
-import { ResolvedInputProps } from '../../../types';
+import { mergeRefs } from '$utils/merge-refs';
+import { mergeFunctions } from '$utils/merge-functions';
+import type { ResolvedInputProps } from '$types';
+import { exposeMessage } from '$utils/expose-message';
+import type { LoadingTextFieldProps } from '$components/loading-text-field';
+import { LoadingTextField } from '$components/loading-text-field';
 
 export type ResolvedTimeInputProps = ResolvedInputProps<{
   loadingTextFieldProps?: LoadingTextFieldProps;
-  timePickerProps?: TimePickerProps;
+  timePickerProps?: TimePickerProps<string, Date>;
 }>;
 
-export const ResolvedTimeInput = React.memo(
-  React.forwardRef<HTMLInputElement, ResolvedTimeInputProps>(
+export const ResolvedTimeInput = memo(
+  forwardRef<HTMLInputElement, ResolvedTimeInputProps>(
     (
       {
         useControllerProps,
         label,
         componentsProps: { loadingTextFieldProps, timePickerProps },
       },
-      forwardRef
+      forwardedRef
     ) => {
       const {
         field: { name, onBlur, onChange, ref, value },
-        fieldState: { invalid, error },
+        fieldState: { error, isTouched },
       } = useController(useControllerProps);
+
+      const showError = useMemo(() => !!(error && isTouched), [error, isTouched]);
+      const errorMessage = useMemo(
+        () => exposeMessage(error, name, label),
+        [error, label, name]
+      );
+
+      const inputRef = useMemo(
+        () => mergeRefs(ref, timePickerProps?.inputRef),
+        [ref, timePickerProps?.inputRef]
+      );
+      const handleChange = useMemo(
+        () => mergeFunctions(onChange, timePickerProps?.onChange),
+        [onChange, timePickerProps?.onChange]
+      );
+      const handleBlur = useMemo(
+        () => mergeFunctions(onBlur, loadingTextFieldProps?.onBlur),
+        [onBlur, loadingTextFieldProps?.onBlur]
+      );
 
       return (
         <TimePicker
           {...timePickerProps}
-          ref={forwardRef}
-          inputRef={mergeRefs(ref, timePickerProps?.inputRef)}
+          ref={forwardedRef}
+          inputRef={inputRef}
           value={value}
           label={label}
-          onChange={mergeFunctions(onChange, timePickerProps?.onChange)}
+          onChange={handleChange}
           renderInput={params => (
             <LoadingTextField
               {...loadingTextFieldProps}
@@ -56,19 +78,9 @@ export const ResolvedTimeInput = React.memo(
                 ),
               }}
               name={name}
-              onBlur={mergeFunctions(onBlur, loadingTextFieldProps?.onBlur)}
-              error={invalid}
-              helperText={
-                error
-                  ? exposeMessage(
-                      error,
-                      name,
-                      typeof loadingTextFieldProps?.label === 'string'
-                        ? loadingTextFieldProps.label
-                        : name
-                    )
-                  : undefined
-              }
+              onBlur={handleBlur}
+              error={showError}
+              helperText={showError ? errorMessage : undefined}
             />
           )}
         />

@@ -1,11 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import {
-  ResolvedMultiSelectInput,
-  ResolvedMultiSelectInputProps,
-} from '../../resolved-inputs';
-import { stringToLabel } from '../../../utils';
-import { FinalInputProps } from '../../../types';
+import { stringToLabel } from '$utils/string-to-label';
+import type { FinalInputProps } from '$types';
+import type { ResolvedMultiSelectInputProps } from '$components/resolved-inputs';
+import { ResolvedMultiSelectInput } from '$components/resolved-inputs/multi-select';
 
 export type MultiSelectInputProps = FinalInputProps<
   ResolvedMultiSelectInputProps,

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 const errorToString = Error.prototype.toString;
 const regExpToString = RegExp.prototype.toString;
 const symbolToString =

@@ -1,8 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { ResolvedSwitchInput, ResolvedSwitchInputProps } from '../../resolved-inputs';
-import { stringToLabel } from '../../../utils';
-import { FinalInputProps } from '../../../types';
+import { stringToLabel } from '$utils/string-to-label';
+import type { FinalInputProps } from '$types';
+import type { ResolvedSwitchInputProps } from '$components/resolved-inputs';
+import { ResolvedSwitchInput } from '$components/resolved-inputs/switch';
 
 export type SwitchInputProps = FinalInputProps<ResolvedSwitchInputProps, 'switchProps'>;
 

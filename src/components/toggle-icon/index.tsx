@@ -1,6 +1,7 @@
 import React from 'react';
-import { SvgIconComponent } from '@mui/icons-material';
-import { Box, BoxProps, SvgIconProps } from '@mui/material';
+import type { SvgIconComponent } from '@mui/icons-material';
+import type { BoxProps, SvgIconProps } from '@mui/material';
+import { Box } from '@mui/material';
 
 export type ToggleIconProps = {
   offIcon: SvgIconComponent;
@@ -15,7 +16,7 @@ export type ToggleIconProps = {
   on?: boolean;
 };
 
-export const ToggleIcon: React.VFC<ToggleIconProps> = ({
+export const ToggleIcon: React.FC<ToggleIconProps> = ({
   offIcon: OffIcon,
   offIconProps,
   onIcon: OnIcon,

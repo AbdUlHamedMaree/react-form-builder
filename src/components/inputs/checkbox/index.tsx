@@ -1,8 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { stringToLabel } from '../../../utils';
-import { ResolvedCheckBoxInput, ResolvedCheckBoxInputProps } from '../../resolved-inputs';
-import { FinalInputProps } from '../../../types';
+import { stringToLabel } from '$utils/string-to-label';
+import type { FinalInputProps } from '$types';
+import type { ResolvedCheckBoxInputProps } from '$components/resolved-inputs';
+import { ResolvedCheckBoxInput } from '$components/resolved-inputs/check-box';
 
 export type CheckBoxInputProps = FinalInputProps<
   ResolvedCheckBoxInputProps,

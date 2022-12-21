@@ -1,20 +1,18 @@
-import {
-  Checkbox,
+import type {
   CheckboxProps,
-  FormControl,
-  FormControlLabel,
   FormControlLabelProps,
   FormControlProps,
-  FormHelperText,
   FormHelperTextProps,
   TypographyProps,
 } from '@mui/material';
+import { Checkbox, FormControl, FormControlLabel, FormHelperText } from '@mui/material';
 import { useController } from 'react-hook-form';
-import React, { forwardRef } from 'react';
+import { forwardRef, useMemo, memo } from 'react';
 
-import { exposeMessage } from '../../../utils/expose-message';
-import { mergeFunctions, mergeRefs } from '../../../utils';
-import { ResolvedInputProps } from '../../../types';
+import { exposeMessage } from '$utils/expose-message';
+import { mergeRefs } from '$utils/merge-refs';
+import { mergeFunctions } from '$utils/merge-functions';
+import type { ResolvedInputProps } from '$types';
 
 export type ResolvedCheckBoxInputProps = ResolvedInputProps<{
   formControlProps?: FormControlProps;
@@ -24,7 +22,7 @@ export type ResolvedCheckBoxInputProps = ResolvedInputProps<{
   formHelperTextProps?: FormHelperTextProps;
 }>;
 
-export const ResolvedCheckBoxInput = React.memo(
+export const ResolvedCheckBoxInput = memo(
   forwardRef<HTMLButtonElement, ResolvedCheckBoxInputProps>(
     function ResolvedCheckBoxInput(
       {
@@ -41,11 +39,30 @@ export const ResolvedCheckBoxInput = React.memo(
     ) {
       const {
         field: { name, onBlur, onChange, ref, value },
-        fieldState: { invalid, error },
+        fieldState: { error, isTouched },
       } = useController(useControllerProps);
 
+      const showError = useMemo(() => !!(error && isTouched), [error, isTouched]);
+      const errorMessage = useMemo(
+        () => exposeMessage(error, name, formControlLabelProps?.label),
+        [error, formControlLabelProps?.label, name]
+      );
+
+      const inputRef = useMemo(
+        () => mergeRefs(ref, checkboxProps?.inputRef),
+        [checkboxProps?.inputRef, ref]
+      );
+      const handleChange = useMemo(
+        () => mergeFunctions(onChange, checkboxProps?.onChange),
+        [checkboxProps?.onChange, onChange]
+      );
+      const handleBlur = useMemo(
+        () => mergeFunctions(onBlur, checkboxProps?.onBlur),
+        [checkboxProps?.onBlur, onBlur]
+      );
+
       return (
-        <FormControl {...formControlProps} error={invalid}>
+        <FormControl {...formControlProps} error={showError}>
           <FormControlLabel
             {...formControlLabelProps}
             control={
@@ -55,24 +72,16 @@ export const ResolvedCheckBoxInput = React.memo(
                 ref={forwardedRef}
                 checked={value}
                 value={value}
-                inputRef={mergeRefs(ref, checkboxProps?.inputRef)}
-                onChange={mergeFunctions(onChange, checkboxProps?.onChange)}
-                onBlur={mergeFunctions(onBlur, checkboxProps?.onBlur)}
+                inputRef={inputRef}
+                onChange={handleChange}
+                onBlur={handleBlur}
               />
             }
             // eslint-disable-next-line react/jsx-no-useless-fragment
             label={<>{label}</>}
           />
-          {error && (
-            <FormHelperText {...formHelperTextProps}>
-              {exposeMessage(
-                error,
-                name,
-                typeof formControlLabelProps?.label === 'string'
-                  ? formControlLabelProps.label
-                  : name
-              )}
-            </FormHelperText>
+          {showError && (
+            <FormHelperText {...formHelperTextProps}>{errorMessage}</FormHelperText>
           )}
         </FormControl>
       );

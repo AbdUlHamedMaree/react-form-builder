@@ -1,10 +1,6 @@
-import {
-  TextFieldProps,
-  TextField,
-  CircularProgress,
-  InputAdornment,
-} from '@mui/material';
-import React, { memo, forwardRef } from 'react';
+import type { TextFieldProps } from '@mui/material';
+import { TextField, CircularProgress, InputAdornment } from '@mui/material';
+import { memo, forwardRef } from 'react';
 
 export type LoadingTextFieldProps = { loading?: boolean } & TextFieldProps;
 

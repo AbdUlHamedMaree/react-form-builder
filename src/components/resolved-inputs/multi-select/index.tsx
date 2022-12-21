@@ -1,3 +1,11 @@
+import type {
+  BoxProps,
+  ChipProps,
+  FormControlProps,
+  MenuItemProps,
+  SelectProps,
+  InputLabelProps,
+} from '@mui/material';
 import {
   Chip,
   CircularProgress,
@@ -7,20 +15,15 @@ import {
   MenuItem,
   Select,
   Box,
-  BoxProps,
-  ChipProps,
-  FormControlProps,
-  MenuItemProps,
-  SelectProps,
   InputAdornment,
-  InputLabelProps,
 } from '@mui/material';
 import { useController } from 'react-hook-form';
-import React from 'react';
+import React, { useMemo, memo, forwardRef } from 'react';
 
-import { exposeMessage } from '../../../utils/expose-message';
-import { mergeFunctions, mergeRefs } from '../../../utils';
-import { ResolvedInputProps } from '../../../types';
+import { mergeRefs } from '$utils/merge-refs';
+import { mergeFunctions } from '$utils/merge-functions';
+import type { ResolvedInputProps } from '$types';
+import { exposeMessage } from '$utils/expose-message';
 
 export type ResolvedMultiSelectInputProps = ResolvedInputProps<
   {
@@ -36,8 +39,8 @@ export type ResolvedMultiSelectInputProps = ResolvedInputProps<
   }
 >;
 
-export const ResolvedMultiSelectInput = React.memo(
-  React.forwardRef<HTMLDivElement, ResolvedMultiSelectInputProps>(
+export const ResolvedMultiSelectInput = memo(
+  forwardRef<HTMLDivElement, ResolvedMultiSelectInputProps>(
     function ResolvedMultiSelectInput(
       {
         useControllerProps,
@@ -52,20 +55,44 @@ export const ResolvedMultiSelectInput = React.memo(
           inputLabelProps,
         },
       },
-      forwardRef
+      forwardedRef
     ) {
       const {
         field: { name, onBlur, onChange, ref, value },
-        fieldState: { invalid, error },
+        fieldState: { error, isTouched },
       } = useController(useControllerProps);
+
+      const showError = useMemo(() => !!(error && isTouched), [error, isTouched]);
+      const errorMessage = useMemo(
+        () => exposeMessage(error, name, label),
+        [error, label, name]
+      );
+
+      const inputRef = useMemo(
+        () => mergeRefs(ref, selectProps?.inputRef),
+        [ref, selectProps?.inputRef]
+      );
+      const handleChange = useMemo(
+        () => mergeFunctions(onChange, selectProps?.onChange),
+        [onChange, selectProps?.onChange]
+      );
+      const handleBlur = useMemo(
+        () => mergeFunctions(onBlur, selectProps?.onBlur),
+        [onBlur, selectProps?.onBlur]
+      );
+
       return (
-        <FormControl {...formControlProps} error={invalid}>
+        <FormControl {...formControlProps} error={showError}>
           <InputLabel {...inputLabelProps}>{label}</InputLabel>
           <Select
             {...selectProps}
-            ref={forwardRef}
+            ref={forwardedRef}
             name={name}
-            inputRef={mergeRefs(ref, selectProps?.inputRef)}
+            inputRef={inputRef}
+            value={value as (string | number)[]}
+            label={label}
+            onChange={handleChange}
+            onBlur={handleBlur}
             renderValue={selected => (
               <Box
                 {...chipsContainerProps}
@@ -103,11 +130,7 @@ export const ResolvedMultiSelectInput = React.memo(
                 selectProps?.inputProps?.endAdornment
               ),
             }}
-            value={value as (string | number)[]}
-            label={label}
-            onChange={mergeFunctions(onChange, selectProps?.onChange)}
-            onBlur={mergeFunctions(onBlur, selectProps?.onBlur)}
-            error={invalid}
+            error={showError}
             multiple
           >
             {Object.entries(items).map(([k, v]) => (
@@ -116,11 +139,7 @@ export const ResolvedMultiSelectInput = React.memo(
               </MenuItem>
             ))}
           </Select>
-          {error && (
-            <FormHelperText>
-              {exposeMessage(error, name, typeof label === 'string' ? label : name)}
-            </FormHelperText>
-          )}
+          {showError && <FormHelperText>{errorMessage}</FormHelperText>}
         </FormControl>
       );
     }

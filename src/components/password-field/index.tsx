@@ -1,30 +1,31 @@
+import React, { useState, memo, forwardRef, useCallback } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { IconButton, InputAdornment } from '@mui/material';
-import React, { useState } from 'react';
-import { LoadingTextField, LoadingTextFieldProps } from '../loading-text-field';
+import type { LoadingTextFieldProps } from '../loading-text-field';
+import { LoadingTextField } from '../loading-text-field';
 import { ToggleIcon } from '../toggle-icon';
 
 export type PasswordFieldProps = LoadingTextFieldProps;
 
-export const PasswordField = React.memo(
-  React.forwardRef<HTMLDivElement, PasswordFieldProps>((props, forwardRef) => {
+export const PasswordField = memo(
+  forwardRef<HTMLDivElement, PasswordFieldProps>((props, forwardedRef) => {
     const [show, setShow] = useState(false);
 
-    const handleMouseDownPassword = React.useCallback(
+    const handleMouseDownPassword = useCallback(
       (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
       },
       []
     );
 
-    const handleClickShowPassword = React.useCallback(() => {
+    const handleClickShowPassword = useCallback(() => {
       setShow(v => !v);
     }, []);
 
     return (
       <LoadingTextField
         {...props}
-        ref={forwardRef}
+        ref={forwardedRef}
         type={show ? 'text' : 'password'}
         InputProps={{
           ...props.InputProps,

@@ -1,8 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { ResolvedTextInput, ResolvedTextInputProps } from '../../resolved-inputs';
-import { stringToLabel } from '../../../utils';
-import { FinalInputProps } from '../../../types';
+import { stringToLabel } from '$utils/string-to-label';
+import type { FinalInputProps } from '$types';
+import type { ResolvedTextInputProps } from '$components/resolved-inputs';
+import { ResolvedTextInput } from '$components/resolved-inputs/text';
 
 export type TextInputProps = FinalInputProps<
   ResolvedTextInputProps,

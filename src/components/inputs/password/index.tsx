@@ -1,8 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { ResolvedPasswordInput, ResolvedPasswordInputProps } from '../../resolved-inputs';
-import { stringToLabel } from '../../../utils';
-import { FinalInputProps } from '../../../types';
+import { stringToLabel } from '$utils/string-to-label';
+import type { FinalInputProps } from '$types';
+import type { ResolvedPasswordInputProps } from '$components/resolved-inputs';
+import { ResolvedPasswordInput } from '$components/resolved-inputs/password';
 
 export type PasswordInputProps = FinalInputProps<
   ResolvedPasswordInputProps,

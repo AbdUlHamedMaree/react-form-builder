@@ -1,7 +1,8 @@
+import React from 'react';
 import { FormProvider } from 'react-hook-form';
-import { handleSubmitContext } from '../context';
-import { AnyObject } from '../types';
-import { UseFormBuilderReturn } from './use-form-builder';
+import { handleSubmitContext } from '$context';
+import type { AnyObject } from '$types';
+import type { UseFormBuilderReturn } from './use-form-builder';
 
 export type FormBuilderProviderProps<
   TFieldType extends AnyObject = AnyObject,

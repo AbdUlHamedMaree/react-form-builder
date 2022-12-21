@@ -1,4 +1,5 @@
-import React, { MutableRefObject } from 'react';
+import type { MutableRefObject } from 'react';
+import type React from 'react';
 
 export const mergeRefs = <T>(
   ...refs: (

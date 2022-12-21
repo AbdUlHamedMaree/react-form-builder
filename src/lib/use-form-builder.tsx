@@ -1,14 +1,15 @@
 import { useCallback, useMemo } from 'react';
-import {
+import type {
   Path,
   SubmitErrorHandler,
   SubmitHandler,
-  useForm,
   UseFormReturn,
 } from 'react-hook-form';
-import { AnyObjectSchema, object } from 'yup';
-import { AnyObject, NewUseFormProps } from '../types';
-import { getFinalUseFormProps } from '../utils';
+import { useForm } from 'react-hook-form';
+import type { AnyObjectSchema } from 'yup';
+import { object } from 'yup';
+import type { AnyObject, NewUseFormProps } from '$types';
+import { getFinalUseFormProps } from '$utils/get-final-use-form-props';
 
 export type UseFormBuilderOptions<
   TFieldType extends AnyObject = AnyObject,

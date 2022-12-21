@@ -1,12 +1,10 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import {
-  ResolvedQuillEditorInput,
-  ResolvedQuillEditorInputProps,
-} from '../../resolved-inputs';
-import { stringToLabel } from '../../../utils';
-import { QuillEditorClassType } from '../../quill-editor';
-import { FinalInputProps } from '../../../types';
+import type QuillClass from 'react-quill';
+import { stringToLabel } from '$utils/string-to-label';
+import type { FinalInputProps } from '$types';
+import type { ResolvedQuillEditorInputProps } from '$components/resolved-inputs';
+import { ResolvedQuillEditorInput } from '$components/resolved-inputs/quill-editor';
 
 export type HtmlInputProps = FinalInputProps<
   ResolvedQuillEditorInputProps,
@@ -14,7 +12,7 @@ export type HtmlInputProps = FinalInputProps<
 >;
 
 export const QuillEditorInput = React.memo(
-  React.forwardRef<QuillEditorClassType, HtmlInputProps>(function QuillEditorInput(
+  React.forwardRef<QuillClass, HtmlInputProps>(function QuillEditorInput(
     {
       name,
       label,

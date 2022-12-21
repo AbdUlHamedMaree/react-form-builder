@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
-import { LoadingButton, LoadingButtonProps } from '@mui/lab';
+import type { LoadingButtonProps } from '@mui/lab';
+import { LoadingButton } from '@mui/lab';
 import { useFormContext } from 'react-hook-form';
-import { handleSubmitContext } from '../../../context';
-import { mergeFunctions } from '../../../utils';
+import { handleSubmitContext } from '$context/handle-submit';
+import { mergeFunctions } from '$utils/merge-functions';
 
 export type FormSubmitInputProps = Omit<LoadingButtonProps, 'loading' | 'type'>;
 

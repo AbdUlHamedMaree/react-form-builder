@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { UseControllerProps } from 'react-hook-form';
+import type React from 'react';
+import type { UseControllerProps } from 'react-hook-form';
 
 export type ResolvedInputProps<
   T extends Record<string, unknown> = {},

@@ -1,18 +1,12 @@
-import {
-  FormControl,
-  FormControlLabel,
-  FormControlLabelProps,
-  FormControlProps,
-  FormHelperText,
-  Switch,
-  SwitchProps,
-} from '@mui/material';
+import type { FormControlLabelProps, FormControlProps, SwitchProps } from '@mui/material';
+import { FormControl, FormControlLabel, FormHelperText, Switch } from '@mui/material';
 import { useController } from 'react-hook-form';
-import React from 'react';
+import { useMemo, memo, forwardRef } from 'react';
 
-import { exposeMessage } from '../../../utils/expose-message';
-import { mergeFunctions, mergeRefs } from '../../../utils';
-import { ResolvedInputProps } from '../../../types';
+import { mergeRefs } from '$utils/merge-refs';
+import { mergeFunctions } from '$utils/merge-functions';
+import type { ResolvedInputProps } from '$types';
+import { exposeMessage } from '$utils/expose-message';
 
 export type ResolvedSwitchInputProps = ResolvedInputProps<{
   formControlProps?: FormControlProps;
@@ -20,33 +14,52 @@ export type ResolvedSwitchInputProps = ResolvedInputProps<{
   switchProps?: SwitchProps;
 }>;
 
-export const ResolvedSwitchInput = React.memo(
-  React.forwardRef<HTMLButtonElement, ResolvedSwitchInputProps>(
+export const ResolvedSwitchInput = memo(
+  forwardRef<HTMLButtonElement, ResolvedSwitchInputProps>(
     (
       {
         useControllerProps,
         label,
         componentsProps: { formControlLabelProps, formControlProps, switchProps },
       },
-      forwardRef
+      forwardedRef
     ) => {
       const {
         field: { name, onBlur, onChange, ref, value },
-        fieldState: { invalid, error },
+        fieldState: { error, isTouched },
       } = useController(useControllerProps);
 
+      const showError = useMemo(() => !!(error && isTouched), [error, isTouched]);
+      const errorMessage = useMemo(
+        () => exposeMessage(error, name, label),
+        [error, label, name]
+      );
+
+      const inputRef = useMemo(
+        () => mergeRefs(ref, switchProps?.inputRef),
+        [ref, switchProps?.inputRef]
+      );
+      const handleChange = useMemo(
+        () => mergeFunctions(onChange, switchProps?.onChange),
+        [onChange, switchProps?.onChange]
+      );
+      const handleBlur = useMemo(
+        () => mergeFunctions(onBlur, switchProps?.onBlur),
+        [onBlur, switchProps?.onBlur]
+      );
+
       return (
-        <FormControl {...formControlProps} error={invalid}>
+        <FormControl {...formControlProps} error={showError}>
           <FormControlLabel
             {...formControlLabelProps}
             control={
               <Switch
                 {...switchProps}
-                ref={forwardRef}
+                ref={forwardedRef}
+                inputRef={inputRef}
                 name={name}
-                onChange={mergeFunctions(onChange, switchProps?.onChange)}
-                onBlur={mergeFunctions(onBlur, switchProps?.onBlur)}
-                inputRef={mergeRefs(ref, switchProps?.inputRef)}
+                onChange={handleChange}
+                onBlur={handleBlur}
                 checked={value}
                 value={value}
               />
@@ -54,11 +67,7 @@ export const ResolvedSwitchInput = React.memo(
             // eslint-disable-next-line react/jsx-no-useless-fragment
             label={<>{label}</>}
           />
-          {error && (
-            <FormHelperText>
-              {exposeMessage(error, name, typeof label === 'string' ? label : name)}
-            </FormHelperText>
-          )}
+          {showError && <FormHelperText>{errorMessage}</FormHelperText>}
         </FormControl>
       );
     }

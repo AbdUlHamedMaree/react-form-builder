@@ -1,19 +1,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, memo, forwardRef } from 'react';
 import { useController } from 'react-hook-form';
-import {
-  Paper,
-  Typography,
-  FormHelperText,
-  PaperProps,
-  TypographyProps,
-  FormHelperTextProps,
-} from '@mui/material';
+import type { PaperProps, TypographyProps, FormHelperTextProps } from '@mui/material';
+import { Paper, Typography, FormHelperText } from '@mui/material';
 
-import { exposeMessage } from '../../../utils/expose-message';
-import { FileWithPreview, ResolvedInputProps } from '../../../types';
-import { mergeFunctions, mergeRefs } from '../../../utils';
-import { FileDropzone, FileDropzoneProps } from '../../image-dropzone';
+import type { FileWithPreview, ResolvedInputProps } from '$types';
+import { mergeRefs } from '$utils/merge-refs';
+import { mergeFunctions } from '$utils/merge-functions';
+import { exposeMessage } from '$utils/expose-message';
+import type { FileDropzoneProps } from '$components/image-dropzone';
+import { FileDropzone } from '$components/image-dropzone';
 
 export type ResolvedFileInputProps = ResolvedInputProps<
   {
@@ -27,8 +23,8 @@ export type ResolvedFileInputProps = ResolvedInputProps<
   }
 >;
 
-export const ResolvedFileInput = React.memo(
-  React.forwardRef<HTMLInputElement, ResolvedFileInputProps>(function ResolvedFileInput(
+export const ResolvedFileInput = memo(
+  forwardRef<HTMLInputElement, ResolvedFileInputProps>(function ResolvedFileInput(
     {
       useControllerProps,
       onUpload,
@@ -40,17 +36,25 @@ export const ResolvedFileInput = React.memo(
         typographyProps,
       },
     },
-    forwardRef
+    forwardedRef
   ) {
     const {
       field: { name, onBlur, onChange, ref, value },
-      fieldState: { invalid, error },
+      fieldState: { error, isTouched },
     } = useController(useControllerProps);
 
     const [loading, setLoading] = useState(false);
-
     const [result, setResult] = useState<FileWithPreview | undefined>(
       value as FileWithPreview
+    );
+
+    const showError = useMemo(
+      () => !!(!loading && error && isTouched),
+      [loading, error, isTouched]
+    );
+    const errorMessage = useMemo(
+      () => exposeMessage(error, name, label),
+      [error, label, name]
     );
 
     useEffect(() => {
@@ -79,6 +83,36 @@ export const ResolvedFileInput = React.memo(
       onBlur();
     }, [onBlur]);
 
+    const inputRef = useMemo(() => mergeRefs(ref, forwardedRef), [ref, forwardedRef]);
+    const memoOnDrop = useMemo(
+      () => mergeFunctions(handleDrop, fileDropzoneProps?.onDrop),
+      [handleDrop, fileDropzoneProps?.onDrop]
+    );
+    const memoOnRemove = useMemo(
+      () => mergeFunctions(handleRemove, fileDropzoneProps?.onRemove),
+      [handleRemove, fileDropzoneProps?.onRemove]
+    );
+    const memoOnRemoveAll = useMemo(
+      () => mergeFunctions(handleRemoveAll, fileDropzoneProps?.onRemoveAll),
+      [handleRemoveAll, fileDropzoneProps?.onRemoveAll]
+    );
+    const memoOnDragLeave = useMemo(
+      () => mergeFunctions(onBlur, fileDropzoneProps?.onDragLeave),
+      [onBlur, fileDropzoneProps?.onDragLeave]
+    );
+    const memoOnDropAccepted = useMemo(
+      () => mergeFunctions(onBlur, fileDropzoneProps?.onDropAccepted),
+      [onBlur, fileDropzoneProps?.onDropAccepted]
+    );
+    const memoOnDropRejected = useMemo(
+      () => mergeFunctions(onBlur, fileDropzoneProps?.onDropRejected),
+      [onBlur, fileDropzoneProps?.onDropRejected]
+    );
+    const memoOnFileDialogCancel = useMemo(
+      () => mergeFunctions(onBlur, fileDropzoneProps?.onFileDialogCancel),
+      [onBlur, fileDropzoneProps?.onFileDialogCancel]
+    );
+
     return (
       <Paper
         variant='outlined'
@@ -87,8 +121,7 @@ export const ResolvedFileInput = React.memo(
           padding: t => t.spacing(2),
           backgroundColor: '#ffffff00',
           ...paperProps?.sx,
-          borderColor: t =>
-            !loading && invalid ? t.palette.error.main : t.palette.divider,
+          borderColor: t => (showError ? t.palette.error.main : t.palette.divider),
         }}
       >
         <Typography
@@ -112,25 +145,22 @@ export const ResolvedFileInput = React.memo(
             onBlur,
           }}
           file={result?.preview}
-          ref={mergeRefs(ref, forwardRef)}
-          onDrop={mergeFunctions(handleDrop, fileDropzoneProps?.onDrop)}
-          onRemove={mergeFunctions(handleRemove, fileDropzoneProps?.onRemove)}
-          onRemoveAll={mergeFunctions(handleRemoveAll, fileDropzoneProps?.onRemoveAll)}
-          onDragLeave={mergeFunctions(onBlur, fileDropzoneProps?.onDragLeave)}
-          onDropAccepted={mergeFunctions(onBlur, fileDropzoneProps?.onDropAccepted)}
-          onDropRejected={mergeFunctions(onBlur, fileDropzoneProps?.onDropRejected)}
-          onFileDialogCancel={mergeFunctions(
-            onBlur,
-            fileDropzoneProps?.onFileDialogCancel
-          )}
+          ref={inputRef}
+          onDrop={memoOnDrop}
+          onRemove={memoOnRemove}
+          onRemoveAll={memoOnRemoveAll}
+          onDragLeave={memoOnDragLeave}
+          onDropAccepted={memoOnDropAccepted}
+          onDropRejected={memoOnDropRejected}
+          onFileDialogCancel={memoOnFileDialogCancel}
         />
-        {!loading && error && (
+        {showError && (
           <FormHelperText
             {...formHelperTextProps}
             error
             sx={{ mt: 2, ...formHelperTextProps?.sx }}
           >
-            {exposeMessage(error, name, typeof label === 'string' ? label : name)}
+            {errorMessage}
           </FormHelperText>
         )}
       </Paper>

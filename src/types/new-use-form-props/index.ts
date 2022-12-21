@@ -1,5 +1,5 @@
-import { UseFormProps } from 'react-hook-form';
-import { AnyObject } from '../popular';
+import type { UseFormProps } from 'react-hook-form';
+import type { AnyObject } from '../popular';
 
 export type NewUseFormProps<
   TFieldType extends AnyObject = AnyObject,

@@ -3,6 +3,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import { swc, defineRollupSwcOption } from 'rollup-plugin-swc3';
+import { typescriptPaths } from 'rollup-plugin-typescript-paths';
 
 import { dirname } from 'path';
 import packageJson from './package.json';
@@ -18,6 +19,7 @@ export default defineConfig([
         sourcemap: true,
         preserveModules: true,
         strict: true,
+        exports: 'named',
       },
       {
         dir: dirname(packageJson.main),
@@ -26,37 +28,20 @@ export default defineConfig([
         sourcemap: true,
         preserveModules: true,
         strict: true,
+        exports: 'named',
         esModule: false,
       },
     ],
     treeshake: 'smallest',
     plugins: [
       peerDepsExternal(),
+      typescriptPaths(),
       nodeResolve(),
       commonjs(),
       swc(
         defineRollupSwcOption({
           sourceMaps: true,
-          jsc: {
-            parser: {
-              syntax: 'typescript',
-              tsx: true,
-              dynamicImport: true,
-            },
-            target: 'es2022',
-            loose: true,
-            minify: {
-              compress: true,
-              mangle: true,
-            },
-            transform: {
-              react: {
-                runtime: 'automatic',
-              },
-            },
-          },
-          module: { strict: true, type: 'es6', strictMode: true },
-          isModule: true,
+          tsconfig: 'tsconfig.json',
         })
       ),
     ],

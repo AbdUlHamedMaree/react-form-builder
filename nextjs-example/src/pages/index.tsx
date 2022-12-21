@@ -8,10 +8,11 @@ import {
   TextInput,
 } from '@mrii/react-form-builder';
 import { Box } from '@mui/material';
-import { SubmitHandler } from 'react-hook-form';
-import { date, number, object, ref, SchemaOf, string } from 'yup';
-import { LocalizationProvider } from '@mui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import type { SubmitHandler } from 'react-hook-form';
+import type { SchemaOf } from 'yup';
+import { date, number, object, ref, string } from 'yup';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 type FormFields = {
   firstName: string;

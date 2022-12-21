@@ -1,19 +1,16 @@
-import {
-  FormHelperText,
-  FormHelperTextProps,
-  Paper,
-  PaperProps,
-  Typography,
-  TypographyProps,
-} from '@mui/material';
+/* eslint-disable @typescript-eslint/unbound-method */
+import type { FormHelperTextProps, PaperProps, TypographyProps } from '@mui/material';
+import { FormHelperText, Paper, Typography } from '@mui/material';
 import { useController } from 'react-hook-form';
-import React from 'react';
+import { useMemo, memo, forwardRef } from 'react';
 
-import { exposeMessage } from '../../../utils/expose-message';
-import { QuillEditor, QuillEditorClassType, QuillEditorProps } from '../../quill-editor';
-import { mergeRefs } from '../../../utils/merge-refs';
-import { mergeFunctions } from '../../../utils/merge-functions';
-import { ResolvedInputProps } from '../../../types';
+import type QuillClass from 'react-quill';
+import type { ResolvedInputProps } from '$types';
+import { exposeMessage } from '$utils/expose-message';
+import { mergeRefs } from '$utils/merge-refs';
+import { mergeFunctions } from '$utils/merge-functions';
+import type { QuillEditorProps } from '$components/quill-editor';
+import { QuillEditor } from '$components/quill-editor';
 
 export type ResolvedQuillEditorInputProps = ResolvedInputProps<{
   quillEditorProps?: QuillEditorProps;
@@ -22,79 +19,90 @@ export type ResolvedQuillEditorInputProps = ResolvedInputProps<{
   formHelperTextProps?: FormHelperTextProps;
 }>;
 
-export const ResolvedQuillEditorInput = React.memo(
-  React.forwardRef<QuillEditorClassType, ResolvedQuillEditorInputProps>(
-    function ResolvedQuillEditorInput(
-      {
-        useControllerProps,
-        componentsProps: {
-          quillEditorProps,
-          formHelperTextProps,
-          paperProps,
-          typographyProps,
-        },
-        label,
+export const ResolvedQuillEditorInput = memo(
+  forwardRef<QuillClass, ResolvedQuillEditorInputProps>(function ResolvedQuillEditorInput(
+    {
+      useControllerProps,
+      componentsProps: {
+        quillEditorProps,
+        formHelperTextProps,
+        paperProps,
+        typographyProps,
       },
-      forwardRef
-    ) {
-      if (!QuillEditor)
-        throw new Error(
-          `You need to install 'quill' and 'react-quill' packages for this component to work`
-        );
-      const {
-        field: { name, onBlur, onChange, ref, value },
-        fieldState: { invalid, error },
-      } = useController(useControllerProps);
+      label,
+    },
+    forwardedRef
+  ) {
+    if (!QuillEditor)
+      throw new Error(
+        `You need to install 'quill' and 'react-quill' packages for this component to work`
+      );
+    const {
+      field: { name, onBlur, onChange, ref, value },
+      fieldState: { error, isTouched },
+    } = useController(useControllerProps);
 
-      return (
-        <Paper
-          variant='outlined'
-          {...paperProps}
+    const showError = useMemo(() => !!(error && isTouched), [error, isTouched]);
+    const errorMessage = useMemo(
+      () => exposeMessage(error, name, label),
+      [error, label, name]
+    );
+
+    const inputRef = useMemo(() => mergeRefs(ref, forwardedRef), [ref, forwardedRef]);
+    const handleChange = useMemo(
+      () => mergeFunctions(content => onChange(content), quillEditorProps?.onChange),
+      [onChange, quillEditorProps?.onChange]
+    );
+    const handleBlur = useMemo(
+      () => mergeFunctions(onBlur, quillEditorProps?.onBlur),
+      [onBlur, quillEditorProps?.onBlur]
+    );
+
+    return (
+      <Paper
+        variant='outlined'
+        {...paperProps}
+        sx={{
+          padding: t => t.spacing(2),
+          ...paperProps?.sx,
+          borderColor: t => (showError ? t.palette.error.main : t.palette.divider),
+        }}
+      >
+        <Typography
+          variant='subtitle2'
+          {...typographyProps}
           sx={{
-            padding: t => t.spacing(2),
-            ...paperProps?.sx,
-            borderColor: t => (invalid ? t.palette.error.main : t.palette.divider),
+            mb: 2,
+            ...typographyProps?.sx,
+            color: showError ? 'error.main' : 'text.secondary',
           }}
         >
-          <Typography
-            variant='subtitle2'
-            {...typographyProps}
-            sx={{
-              mb: 2,
-              ...typographyProps?.sx,
-              color: invalid ? 'error.main' : 'text.secondary',
-            }}
-          >
-            {label}
-          </Typography>
+          {label}
+        </Typography>
 
-          <QuillEditor
-            {...quillEditorProps}
-            sx={{
-              minHeight: 400,
-              borderRadius: t => t.shape.borderRadius,
-              ...quillEditorProps?.sx,
-              borderColor: t => (invalid ? t.palette.error.main : t.palette.divider),
-            }}
-            value={value ?? ''}
-            onChange={mergeFunctions(
-              content => onChange(content),
-              quillEditorProps?.onChange
-            )}
-            onBlur={mergeFunctions(onBlur, quillEditorProps?.onBlur)}
-            ref={mergeRefs(ref, forwardRef)}
-          />
-          {error && (
-            <FormHelperText
-              error
-              {...formHelperTextProps}
-              sx={{ mt: 2, ...formHelperTextProps?.sx }}
-            >
-              {exposeMessage(error, name, typeof label === 'string' ? label : name)}
-            </FormHelperText>
-          )}
-        </Paper>
-      );
-    }
-  )
+        <QuillEditor
+          {...quillEditorProps}
+          ref={inputRef}
+          value={value}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          sx={{
+            minHeight: 400,
+            borderRadius: t => t.shape.borderRadius,
+            ...quillEditorProps?.sx,
+            borderColor: t => (showError ? t.palette.error.main : t.palette.divider),
+          }}
+        />
+        {showError && (
+          <FormHelperText
+            error
+            {...formHelperTextProps}
+            sx={{ mt: 2, ...formHelperTextProps?.sx }}
+          >
+            {errorMessage}
+          </FormHelperText>
+        )}
+      </Paper>
+    );
+  })
 );

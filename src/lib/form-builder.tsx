@@ -1,11 +1,8 @@
 import React from 'react';
-import { AnyObject } from '../types';
+import type { AnyObject } from '../types';
 import { FormBuilderProvider } from './form-builder-provider';
-import {
-  useFormBuilder,
-  UseFormBuilderOptions,
-  UseFormBuilderReturn,
-} from './use-form-builder';
+import type { UseFormBuilderOptions, UseFormBuilderReturn } from './use-form-builder';
+import { useFormBuilder } from './use-form-builder';
 
 export type FormBuilderProps<
   TFieldType extends AnyObject = AnyObject,
@@ -19,13 +16,14 @@ export type FormBuilderProps<
 export const FormBuilder = <
   TFieldType extends AnyObject = AnyObject,
   TContext extends AnyObject = AnyObject
->(
-  props: FormBuilderProps<TFieldType, TContext>
-): ReturnType<React.FC> => {
+>({
+  children,
+  ...props
+}: FormBuilderProps<TFieldType, TContext>): ReturnType<React.FC> => {
   const methods = useFormBuilder(props);
   return (
     <FormBuilderProvider {...methods}>
-      {props.children instanceof Function ? props.children(methods) : props.children}
+      {children instanceof Function ? children(methods) : children}
     </FormBuilderProvider>
   );
 };

@@ -1,8 +1,9 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { ResolvedDateInput, ResolvedDateInputProps } from '../../resolved-inputs';
-import { stringToLabel } from '../../../utils';
-import { FinalInputProps } from '../../../types';
+import { stringToLabel } from '$utils/string-to-label';
+import type { FinalInputProps } from '$types';
+import type { ResolvedDateInputProps } from '$components/resolved-inputs';
+import { ResolvedDateInput } from '$components/resolved-inputs/date';
 
 export type DateInputProps = FinalInputProps<ResolvedDateInputProps, 'datePickerProps'>;
 
