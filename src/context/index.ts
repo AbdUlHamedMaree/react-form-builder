@@ -1,1 +1,1 @@
-export * from './handle-submit';
+export * from './form-props';

@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import type QuillClass from 'react-quill';
 import { stringToLabel } from '$utils/string-to-label';
 import type { FinalInputProps } from '$types';
-import type { ResolvedQuillEditorInputProps } from '$components/resolved-inputs';
+import type { ResolvedQuillEditorInputProps } from '$components/resolved-inputs/quill-editor';
 import { ResolvedQuillEditorInput } from '$components/resolved-inputs/quill-editor';
 
 export type HtmlInputProps = FinalInputProps<

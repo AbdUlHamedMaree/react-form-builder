@@ -10,33 +10,39 @@ import type { AnyObjectSchema } from 'yup';
 import { object } from 'yup';
 import type { AnyObject, NewUseFormProps } from '$types';
 import { getFinalUseFormProps } from '$utils/get-final-use-form-props';
+import { uselessFunction } from '$utils/useless-function';
+
+export type UseFormBuilderExtraOptions<TFieldType extends AnyObject = AnyObject> = {
+  validation?: AnyObjectSchema;
+  onSubmit?: SubmitHandler<TFieldType>;
+  onError?: SubmitErrorHandler<TFieldType>;
+};
 
 export type UseFormBuilderOptions<
   TFieldType extends AnyObject = AnyObject,
   TContext extends AnyObject = AnyObject
-> = {
-  validation?: AnyObjectSchema;
-  onSubmit?: SubmitHandler<TFieldType>;
-  onError?: SubmitErrorHandler<TFieldType>;
-} & NewUseFormProps<TFieldType, TContext>;
+> = UseFormBuilderExtraOptions<TFieldType> & NewUseFormProps<TFieldType, TContext>;
+
+export type UseFormBuilderExtraReturn<TFieldType extends AnyObject = AnyObject> = {
+  onSubmit: SubmitHandler<TFieldType>;
+  onError: SubmitErrorHandler<TFieldType>;
+  n: <T extends Path<TFieldType>>(path: T) => T;
+};
 
 export type UseFormBuilderReturn<
   TFieldType extends AnyObject = AnyObject,
   TContext extends AnyObject = AnyObject
-> = {
-  onSubmit: SubmitHandler<TFieldType>;
-  onError: SubmitErrorHandler<TFieldType>;
-  n: <T extends Path<TFieldType>>(path: T) => T;
-} & UseFormReturn<TFieldType, TContext>;
+> = UseFormBuilderExtraReturn<TFieldType> & UseFormReturn<TFieldType, TContext>;
+
+const uselessSchema = object();
 
 export const useFormBuilder = <
   TFieldType extends AnyObject = AnyObject,
   TContext extends AnyObject = AnyObject
 >({
-  validation = object(),
-  onSubmit = () => null,
-  // eslint-disable-next-line no-console
-  onError = (...args) => console.error(`[react-form-builder:submit-error]`, ...args),
+  validation = uselessSchema,
+  onSubmit = uselessFunction,
+  onError = uselessFunction,
   ...useFormProps
 }: UseFormBuilderOptions<TFieldType, TContext>): UseFormBuilderReturn<
   TFieldType,

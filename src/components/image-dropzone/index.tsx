@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable global-require */
 import React, { forwardRef, useCallback, useState } from 'react';
-import type { DropzoneState } from 'react-dropzone';
-import { type DropzoneOptions } from 'react-dropzone';
+import { useDropzone, type DropzoneOptions } from 'react-dropzone';
 import {
   Avatar,
   Box,
@@ -16,12 +15,6 @@ import {
 } from '@mui/material';
 import { Close, Visibility } from '@mui/icons-material';
 import { mergeRefs } from '$utils/merge-refs';
-import { requireOptionalDependency } from '$utils/require-optional-dependency';
-
-const useDropzone = requireOptionalDependency(
-  'react-dropzone',
-  `You need to install 'react-dropzone' package for 'FilesInput' input to work`
-).useDropzone as (options?: DropzoneOptions) => DropzoneState;
 
 export type ImageDropzoneLabels = {
   preview: string;

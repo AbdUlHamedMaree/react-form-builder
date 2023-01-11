@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FormProvider } from 'react-hook-form';
-import { handleSubmitContext } from '$context';
+import { FormPropsContext } from '$context';
 import type { AnyObject } from '$types';
 import type { UseFormBuilderReturn } from './use-form-builder';
 
@@ -15,14 +15,22 @@ export const FormBuilderProvider = <
 >({
   onError,
   onSubmit,
+  n,
   children,
   ...methods
 }: React.PropsWithChildren<
   FormBuilderProviderProps<TFieldType, TContext>
->): ReturnType<React.FC> => (
-  <FormProvider {...methods}>
-    <handleSubmitContext.Provider value={methods.handleSubmit(onSubmit, onError)}>
-      {children}
-    </handleSubmitContext.Provider>
-  </FormProvider>
-);
+>): ReturnType<React.FC> => {
+  const formPropsContextValue = useMemo(
+    () => ({ onSubmit, onError, n }),
+    [onSubmit, onError, n]
+  );
+
+  return (
+    <FormProvider {...methods}>
+      <FormPropsContext.Provider value={formPropsContextValue}>
+        {children}
+      </FormPropsContext.Provider>
+    </FormProvider>
+  );
+};

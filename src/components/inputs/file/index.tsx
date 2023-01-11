@@ -2,7 +2,7 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { stringToLabel } from '$utils/string-to-label';
 import type { FinalInputProps } from '$types';
-import type { ResolvedFileInputProps } from '$components/resolved-inputs';
+import type { ResolvedFileInputProps } from '$components/resolved-inputs/file';
 import { ResolvedFileInput } from '$components/resolved-inputs/file';
 
 export type FileInputProps = FinalInputProps<
