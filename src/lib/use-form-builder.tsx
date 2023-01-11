@@ -11,11 +11,13 @@ import { object } from 'yup';
 import type { AnyObject, NewUseFormProps } from '$types';
 import { getFinalUseFormProps } from '$utils/get-final-use-form-props';
 import { uselessFunction } from '$utils/useless-function';
+import type { DefaultValues } from '$types/default-values';
 
 export type UseFormBuilderExtraOptions<TFieldType extends AnyObject = AnyObject> = {
   validation?: AnyObjectSchema;
   onSubmit?: SubmitHandler<TFieldType>;
   onError?: SubmitErrorHandler<TFieldType>;
+  defaultValues?: DefaultValues<TFieldType>;
 };
 
 export type UseFormBuilderOptions<
@@ -35,6 +37,7 @@ export type UseFormBuilderReturn<
 > = UseFormBuilderExtraReturn<TFieldType> & UseFormReturn<TFieldType, TContext>;
 
 const uselessSchema = object();
+const handleError = (...err: any[]) => console.error(...err);
 
 export const useFormBuilder = <
   TFieldType extends AnyObject = AnyObject,
@@ -42,7 +45,7 @@ export const useFormBuilder = <
 >({
   validation = uselessSchema,
   onSubmit = uselessFunction,
-  onError = uselessFunction,
+  onError = handleError,
   ...useFormProps
 }: UseFormBuilderOptions<TFieldType, TContext>): UseFormBuilderReturn<
   TFieldType,

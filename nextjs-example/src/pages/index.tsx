@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import type { DefaultValues } from '@mrii/react-form-builder';
 import {
   DateInput,
   FormBuilder,
@@ -25,7 +26,7 @@ type FormFields = {
 };
 
 const schema: SchemaOf<FormFields> = object({
-  firstName: string().required(),
+  firstName: string().oneOf(['a', 'b']).required(),
   lastName: string().optional(),
   email: string().email().required(),
   salary: number().positive().required(),
@@ -36,7 +37,7 @@ const schema: SchemaOf<FormFields> = object({
     .required(),
 });
 
-const defaultValues: FormFields = {
+const defaultValues: DefaultValues<FormFields> = {
   firstName: '',
   lastName: '',
   email: '',
