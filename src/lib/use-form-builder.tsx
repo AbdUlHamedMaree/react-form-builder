@@ -29,7 +29,7 @@ export type UseFormBuilderExtraReturn<TFieldType extends AnyObject = AnyObject> 
   onSubmit: SubmitHandler<TFieldType>;
   onError: SubmitErrorHandler<TFieldType>;
   n: <T extends Path<TFieldType>>(path: T) => T;
-  triggerFormSubmit: (e: React.BaseSyntheticEvent<object, any, any>) => void;
+  triggerFormSubmit: (e?: React.BaseSyntheticEvent<object, any, any>) => void;
 };
 
 export type UseFormBuilderReturn<

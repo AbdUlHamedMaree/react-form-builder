@@ -1,6 +1,6 @@
 {
   "name": "@mrii/react-form-builder",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "private": false,
   "sideEffects": false,
   "description": "library to easily build forms using react-hook-form, MUI & yup",
