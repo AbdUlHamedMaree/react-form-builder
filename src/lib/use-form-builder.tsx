@@ -29,6 +29,7 @@ export type UseFormBuilderExtraReturn<TFieldType extends AnyObject = AnyObject> 
   onSubmit: SubmitHandler<TFieldType>;
   onError: SubmitErrorHandler<TFieldType>;
   n: <T extends Path<TFieldType>>(path: T) => T;
+  triggerFormSubmit: (e: React.BaseSyntheticEvent<object, any, any>) => void;
 };
 
 export type UseFormBuilderReturn<
@@ -37,7 +38,7 @@ export type UseFormBuilderReturn<
 > = UseFormBuilderExtraReturn<TFieldType> & UseFormReturn<TFieldType, TContext>;
 
 const uselessSchema = object();
-const handleError = (...err: any[]) => console.error(...err);
+const n: UseFormBuilderReturn['n'] = k => k;
 
 export const useFormBuilder = <
   TFieldType extends AnyObject = AnyObject,
@@ -45,7 +46,7 @@ export const useFormBuilder = <
 >({
   validation = uselessSchema,
   onSubmit = uselessFunction,
-  onError = handleError,
+  onError = console.error,
   ...useFormProps
 }: UseFormBuilderOptions<TFieldType, TContext>): UseFormBuilderReturn<
   TFieldType,
@@ -56,6 +57,11 @@ export const useFormBuilder = <
     [useFormProps, validation]
   );
   const methods = useForm(resolvedFormHookParams);
-  const n = useCallback<UseFormBuilderReturn['n']>(p => p, []);
-  return { ...methods, onSubmit, onError, n };
+
+  const triggerFormSubmit = useCallback<UseFormBuilderReturn['triggerFormSubmit']>(
+    e => methods.handleSubmit(onSubmit, onError)(e),
+    [methods.handleSubmit, onError, onSubmit]
+  );
+
+  return { ...methods, triggerFormSubmit, onSubmit, onError, n };
 };

@@ -1,6 +1,6 @@
 {
   "name": "@mrii/react-form-builder",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": false,
   "sideEffects": false,
   "description": "library to easily build forms using react-hook-form, MUI & yup",
@@ -50,8 +50,8 @@
     "example:next:dev": "concurrently -k -n build,dev -c magenta,cyan \"yarn build:watch -p none\" \"yarn --cwd nextjs-example dev\"",
     "example:react:dev": "concurrently -k -n build,dev -c magenta,cyan \"yarn build:watch -p none\" \"yarn --cwd reactjs-example start\"",
     "test": "jest",
-    "lint": "concurrently --kill-others-on-fail -n tsc,eslint -c magenta,cyan \"yarn type-check\" \"yarn eslint --quiet\"",
-    "lint:fix": "concurrently --kill-others-on-fail -n tsc,eslint -c magenta,cyan \"yarn type-check\" \"yarn eslint --fix --quiet\"",
+    "lint": "concurrently --kill-others-on-fail -n tsc,eslint -c magenta,cyan \"yarn type-check\" \"yarn eslint\"",
+    "lint:fix": "concurrently --kill-others-on-fail -n tsc,eslint -c magenta,cyan \"yarn type-check\" \"yarn eslint --fix\"",
     "type-check": "tsc -p ./tsconfig.eslint.json",
     "tsc": "tsc",
     "eslint": "eslint .",
