@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-template-curly-in-string */
 import { printValue } from './print';
 
+// TODO: fix with type `Yup.LocaleObject`
 export const mixed = {
   default: "'${path}' is invalid",
   required: "'${path}' is a required field",

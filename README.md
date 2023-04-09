@@ -56,7 +56,7 @@ type FormFields = {
   title: string;
 };
 
-const Form: React.VFC = () => {
+const Form: React.FC = () => {
   const onSubmit = useCallback<SubmitHandler<FormFields>>(async values => {
     await new Promise(res => {
       setTimeout(res, 2000);
@@ -102,7 +102,7 @@ import {
 } from '@mrii/react-form-builder';
 import { Box } from '@mui/material';
 import { SubmitHandler } from 'react-hook-form';
-import { date, number, object, ref, SchemaOf, string } from 'yup';
+import { date, number, object, ref, Schema, string } from 'yup';
 import { LocalizationProvider } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
@@ -116,7 +116,7 @@ type FormFields = {
   repeatPassword: string;
 };
 
-const schema: SchemaOf<FormFields> = object({
+const schema: Schema<FormFields> = object({
   firstName: string().required(),
   lastName: string().optional(),
   email: string().email().required(),
@@ -138,7 +138,7 @@ const defaultValues: FormFields = {
   repeatPassword: '',
 };
 
-const Form: React.VFC = () => {
+const Form: React.FC = () => {
   const onSubmit = useCallback<SubmitHandler<FormFields>>(async values => {
     await new Promise(res => {
       setTimeout(res, 2000);

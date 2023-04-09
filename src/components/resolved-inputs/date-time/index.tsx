@@ -12,7 +12,7 @@ import { LoadingTextField } from '$components/loading-text-field';
 
 export type ResolvedDateTimeInputProps = ResolvedInputProps<{
   loadingTextFieldProps?: LoadingTextFieldProps;
-  dateTimePickerProps?: Partial<DateTimePickerProps<string, Date>>;
+  dateTimePickerProps?: Partial<DateTimePickerProps<Date>>;
 }>;
 
 export const ResolvedDateTimeInput = memo(
@@ -56,33 +56,22 @@ export const ResolvedDateTimeInput = memo(
         label={label}
         inputRef={inputRef}
         onChange={handleChange}
-        renderInput={params => (
-          <LoadingTextField
-            {...loadingTextFieldProps}
-            {...params}
-            InputProps={{
-              ...loadingTextFieldProps?.InputProps,
-              ...params?.InputProps,
-              endAdornment: (
-                <>
-                  {loadingTextFieldProps?.InputProps?.endAdornment}
-                  {params?.InputProps?.endAdornment}
-                </>
-              ),
-              startAdornment: (
-                <>
-                  {loadingTextFieldProps?.InputProps?.startAdornment}
-                  {params?.InputProps?.startAdornment}
-                </>
-              ),
-            }}
-            name={name}
-            onBlur={handleBlur}
-            error={showError}
-            label={label}
-            helperText={showError ? errorMessage : undefined}
-          />
-        )}
+        slots={{
+          ...dateTimePickerProps?.slots,
+          textField: LoadingTextField,
+        }}
+        slotProps={{
+          ...dateTimePickerProps?.slotProps,
+          textField: {
+            ...dateTimePickerProps?.slots?.textField,
+            ...loadingTextFieldProps,
+            name,
+            onBlur: handleBlur,
+            error: showError,
+            label,
+            helperText: showError ? errorMessage : undefined,
+          },
+        }}
       />
     );
   })

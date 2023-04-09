@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useMemo } from 'react';
 import type {
   Path,
@@ -6,7 +7,6 @@ import type {
   UseFormReturn,
 } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
-import type { AnyObjectSchema } from 'yup';
 import { object } from 'yup';
 import type { AnyObject, NewUseFormProps } from '$types';
 import { getFinalUseFormProps } from '$utils/get-final-use-form-props';
@@ -14,7 +14,9 @@ import { uselessFunction } from '$utils/useless-function';
 import type { DefaultValues } from '$types/default-values';
 
 export type UseFormBuilderExtraOptions<TFieldType extends AnyObject = AnyObject> = {
-  validation?: AnyObjectSchema;
+  validation?: any;
+  // causing an errors with every object schema
+  // validation?: AnyObjectSchema;
   onSubmit?: SubmitHandler<TFieldType>;
   onError?: SubmitErrorHandler<TFieldType>;
   defaultValues?: DefaultValues<TFieldType>;
@@ -46,6 +48,7 @@ export const useFormBuilder = <
 >({
   validation = uselessSchema,
   onSubmit = uselessFunction,
+  // eslint-disable-next-line no-console
   onError = console.error,
   ...useFormProps
 }: UseFormBuilderOptions<TFieldType, TContext>): UseFormBuilderReturn<
@@ -60,6 +63,7 @@ export const useFormBuilder = <
 
   const triggerFormSubmit = useCallback<UseFormBuilderReturn['triggerFormSubmit']>(
     e => methods.handleSubmit(onSubmit, onError)(e),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [methods.handleSubmit, onError, onSubmit]
   );
 

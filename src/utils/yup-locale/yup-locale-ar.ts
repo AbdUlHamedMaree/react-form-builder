@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-template-curly-in-string */
+import type { LocaleObject } from 'yup';
 import { printValue } from './print';
 
+// TODO: fix with type `Yup.LocaleObject`
 export const mixed = {
   default: "'${path}' غير صالح",
   required: "'${path}' حقل مطلوب",

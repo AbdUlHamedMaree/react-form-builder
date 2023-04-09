@@ -12,7 +12,7 @@ import { LoadingTextField } from '$components/loading-text-field';
 
 export type ResolvedDateInputProps = ResolvedInputProps<{
   loadingTextFieldProps?: LoadingTextFieldProps;
-  datePickerProps?: Partial<DatePickerProps<string, Date>>;
+  datePickerProps?: Partial<DatePickerProps<Date>>;
 }>;
 
 export const ResolvedDateInput = memo(
@@ -56,33 +56,22 @@ export const ResolvedDateInput = memo(
         inputRef={inputRef}
         onChange={handleChange}
         label={label}
-        renderInput={params => (
-          <LoadingTextField
-            {...loadingTextFieldProps}
-            {...params}
-            InputProps={{
-              ...loadingTextFieldProps?.InputProps,
-              ...params?.InputProps,
-              endAdornment: (
-                <>
-                  {loadingTextFieldProps?.InputProps?.endAdornment}
-                  {params?.InputProps?.endAdornment}
-                </>
-              ),
-              startAdornment: (
-                <>
-                  {loadingTextFieldProps?.InputProps?.startAdornment}
-                  {params?.InputProps?.startAdornment}
-                </>
-              ),
-            }}
-            name={name}
-            label={label}
-            onBlur={handleBlur}
-            error={showError}
-            helperText={showError ? errorMessage : undefined}
-          />
-        )}
+        slots={{
+          ...datePickerProps?.slots,
+          textField: LoadingTextField,
+        }}
+        slotProps={{
+          ...datePickerProps?.slotProps,
+          textField: {
+            ...datePickerProps?.slots?.textField,
+            ...loadingTextFieldProps,
+            name,
+            onBlur: handleBlur,
+            error: showError,
+            label,
+            helperText: showError ? errorMessage : undefined,
+          },
+        }}
       />
     );
   })

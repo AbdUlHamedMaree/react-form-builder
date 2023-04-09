@@ -10,7 +10,7 @@ import {
 } from '@mrii/react-form-builder';
 import { Box } from '@mui/material';
 import type { SubmitHandler } from 'react-hook-form';
-import type { SchemaOf } from 'yup';
+import type { ObjectSchema } from 'yup';
 import { date, number, object, ref, string } from 'yup';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -25,15 +25,15 @@ type FormFields = {
   repeatPassword: string;
 };
 
-const schema: SchemaOf<FormFields> = object({
-  firstName: string().oneOf(['a', 'b']).required(),
+const schema: ObjectSchema<FormFields> = object({
+  firstName: string().required(),
   lastName: string().optional(),
   email: string().email().required(),
   salary: number().positive().required(),
   dateOfBirth: date().max(new Date()).required(),
   password: string().required(),
   repeatPassword: string()
-    .equals([ref('password')], 'Passwords must match')
+    .oneOf([ref<string>('password')], 'Passwords must match')
     .required(),
 });
 
@@ -47,7 +47,7 @@ const defaultValues: DefaultValues<FormFields> = {
   repeatPassword: '',
 };
 
-const Form: React.VFC = () => {
+const Form: React.FC = () => {
   const onSubmit = useCallback<SubmitHandler<FormFields>>(async values => {
     await new Promise(res => {
       setTimeout(res, 2000);

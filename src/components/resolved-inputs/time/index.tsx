@@ -12,7 +12,7 @@ import { LoadingTextField } from '$components/loading-text-field';
 
 export type ResolvedTimeInputProps = ResolvedInputProps<{
   loadingTextFieldProps?: LoadingTextFieldProps;
-  timePickerProps?: TimePickerProps<string, Date>;
+  timePickerProps?: TimePickerProps<Date>;
 }>;
 
 export const ResolvedTimeInput = memo(
@@ -57,32 +57,22 @@ export const ResolvedTimeInput = memo(
           value={value}
           label={label}
           onChange={handleChange}
-          renderInput={params => (
-            <LoadingTextField
-              {...loadingTextFieldProps}
-              {...params}
-              InputProps={{
-                ...loadingTextFieldProps?.InputProps,
-                ...params?.InputProps,
-                endAdornment: (
-                  <>
-                    {loadingTextFieldProps?.InputProps?.endAdornment}
-                    {params?.InputProps?.endAdornment}
-                  </>
-                ),
-                startAdornment: (
-                  <>
-                    {loadingTextFieldProps?.InputProps?.startAdornment}
-                    {params?.InputProps?.startAdornment}
-                  </>
-                ),
-              }}
-              name={name}
-              onBlur={handleBlur}
-              error={showError}
-              helperText={showError ? errorMessage : undefined}
-            />
-          )}
+          slots={{
+            ...timePickerProps?.slots,
+            textField: LoadingTextField,
+          }}
+          slotProps={{
+            ...timePickerProps?.slotProps,
+            textField: {
+              ...timePickerProps?.slots?.textField,
+              ...loadingTextFieldProps,
+              name,
+              onBlur: handleBlur,
+              error: showError,
+              label,
+              helperText: showError ? errorMessage : undefined,
+            },
+          }}
         />
       );
     }

@@ -6,4 +6,5 @@ export type FormPropsContextModel<TFieldType extends AnyObject = AnyObject> = Pa
   UseFormBuilderExtraReturn<TFieldType>
 >;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const FormPropsContext = createContext<FormPropsContextModel<any>>({});
